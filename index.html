@@ -142,6 +142,7 @@
         .recommendations {
             border-left: 4px solid var(--accent-color);
             padding-left: 20px;
+            margin-bottom: 30px;
         }
         
         .recommendation-item {
@@ -155,6 +156,30 @@
             margin: 20px 0;
         }
         
+        .export-options {
+            margin-top: 30px;
+            padding: 15px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .export-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .export-btn {
+            background-color: var(--dark-color);
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        .export-btn:hover {
+            background-color: #2c3e50;
+        }
+        
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -162,6 +187,10 @@
             
             .options {
                 padding-left: 10px;
+            }
+            
+            .export-buttons {
+                flex-direction: column;
             }
         }
     </style>
@@ -706,10 +735,21 @@
             <h3>Recommendations for Growth</h3>
             <div id="recommendations-list"></div>
         </div>
+        
+        <div class="export-options">
+            <h3>Export Results</h3>
+            <div class="export-buttons">
+                <button id="export-pdf" class="export-btn">Download Complete Report (PDF)</button>
+            </div>
+        </div>
     </div>
 
     <!-- Include Chart.js for the radar chart -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <!-- Include jsPDF for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Include html2canvas for chart capture -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -719,7 +759,11 @@
             const personaTitle = document.getElementById('persona-title');
             const personaDescription = document.getElementById('persona-description');
             const recommendationsList = document.getElementById('recommendations-list');
+            const exportPdfBtn = document.getElementById('export-pdf');
             let radarChart = null;
+            let currentScores = null;
+            let currentPersona = null;
+            let currentRecommendations = null;
             
             // Define the persona levels
             const personas = [
@@ -996,8 +1040,11 @@
                 e.preventDefault();
                 
                 const scores = calculateScores();
+                currentScores = scores;
                 const persona = determinePersona(scores.overall);
+                currentPersona = persona;
                 const userRecommendations = getRecommendations(scores.clusters);
+                currentRecommendations = userRecommendations;
                 
                 // Update the results UI
                 overallScoreElement.textContent = scores.overall.toFixed(1);
@@ -1021,6 +1068,88 @@
                 
                 // Scroll to results
                 results.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Export PDF function
+            exportPdfBtn.addEventListener('click', function() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('p', 'mm', 'a4');
+                const width = doc.internal.pageSize.getWidth();
+                const margin = 20;
+                let yPos = 20;
+                
+                // Title
+                doc.setFontSize(20);
+                doc.setTextColor(52, 152, 219);
+                doc.text('Educator AI Competency Assessment Report', width/2, yPos, { align: 'center' });
+                yPos += 15;
+                
+                // Persona
+                doc.setFontSize(16);
+                doc.setTextColor(52, 152, 219);
+                doc.text(`AI Educator Persona: ${currentPersona.name}`, width/2, yPos, { align: 'center' });
+                yPos += 10;
+                
+                // Overall Score
+                doc.setFontSize(14);
+                doc.setTextColor(0, 0, 0);
+                doc.text(`Overall Score: ${currentScores.overall.toFixed(1)} / 5`, margin, yPos);
+                yPos += 10;
+                
+                // Persona Description
+                doc.setFontSize(12);
+                const splitDesc = doc.splitTextToSize(currentPersona.description, width - 2*margin);
+                doc.text(splitDesc, margin, yPos);
+                yPos += splitDesc.length * 7;
+                
+                // Capture Chart
+                html2canvas(document.getElementById('radar-chart')).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    
+                    // Add some space before chart
+                    yPos += 10;
+                    
+                    // Add chart title
+                    doc.setFontSize(14);
+                    doc.text('Competency Areas Profile', margin, yPos);
+                    yPos += 8;
+                    
+                    // Add chart to PDF
+                    const imgWidth = 170;
+                    const imgHeight = canvas.height * imgWidth / canvas.width;
+                    doc.addImage(imgData, 'PNG', (width - imgWidth)/2, yPos, imgWidth, imgHeight);
+                    yPos += imgHeight + 15;
+                    
+                    // Add recommendations
+                    doc.setFontSize(14);
+                    doc.text('Recommendations for Growth', margin, yPos);
+                    yPos += 8;
+                    
+                    doc.setFontSize(12);
+                    currentRecommendations.forEach(rec => {
+                        const text = `${rec.cluster}: ${rec.recommendation}`;
+                        const splitRec = doc.splitTextToSize(text, width - 2*margin);
+                        
+                        // Check if we need a new page
+                        if (yPos + splitRec.length * 6 > doc.internal.pageSize.getHeight() - margin) {
+                            doc.addPage();
+                            yPos = 20;
+                        }
+                        
+                        doc.text(splitRec, margin, yPos);
+                        yPos += splitRec.length * 6 + 5;
+                    });
+                    
+                    // Add date and time at the bottom
+                    const now = new Date();
+                    doc.setFontSize(10);
+                    doc.setTextColor(100, 100, 100);
+                    doc.text(`Report generated: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`, 
+                             width - margin, doc.internal.pageSize.getHeight() - 10, { align: 'right' });
+                    
+                    // Save the PDF
+                    doc.save('AI_Competency_Assessment_Report.pdf');
+                });
             });
         });
     </script>
