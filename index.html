@@ -110,15 +110,13 @@
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
         
         .score-value {
             font-size: 2rem;
             font-weight: bold;
             color: var(--primary-color);
+            margin-bottom: 10px;
         }
         
         .persona-level {
@@ -692,8 +690,8 @@
         </div>
         
         <div class="score-card">
-            <div class="score-value" id="overall-score">0</div>
             <div>
+                <div class="score-value" id="overall-score">0</div>
                 <h3>Overall Score</h3>
                 <p>Based on all competency areas</p>
             </div>
@@ -914,17 +912,25 @@
                             ctx.lineTo(xCenter + circleRadius, yCenter + 5);
                             ctx.stroke();
                             
-                            // Add value labels at the ends of the axes
-                            if (i === maxValue) {
-                                ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-                                ctx.font = '10px Arial';
-                                ctx.textAlign = 'center';
-                                ctx.textBaseline = 'middle';
-                                ctx.fillText(i.toString(), xCenter, yCenter - radius - 15);
-                                ctx.fillText(i.toString(), xCenter, yCenter + radius + 15);
-                                ctx.fillText(i.toString(), xCenter - radius - 15, yCenter);
-                                ctx.fillText(i.toString(), xCenter + radius + 15, yCenter);
-                            }
+                            // Add value labels at each tick point
+                            ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+                            ctx.font = '10px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            
+                            // Top axis label
+                            ctx.fillText(i.toString(), xCenter, yCenter - circleRadius - 10);
+                            
+                            // Bottom axis label
+                            ctx.fillText(i.toString(), xCenter, yCenter + circleRadius + 10);
+                            
+                            // Left axis label
+                            ctx.textAlign = 'right';
+                            ctx.fillText(i.toString(), xCenter - circleRadius - 10, yCenter);
+                            
+                            // Right axis label
+                            ctx.textAlign = 'left';
+                            ctx.fillText(i.toString(), xCenter + circleRadius + 10, yCenter);
                         }
                         
                         ctx.restore();
