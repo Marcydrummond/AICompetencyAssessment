@@ -692,11 +692,11 @@
         </div>
         
         <div class="score-card">
+            <div class="score-value" id="overall-score">0</div>
             <div>
                 <h3>Overall Score</h3>
                 <p>Based on all competency areas</p>
             </div>
-            <div class="score-value" id="overall-score">0</div>
         </div>
         
         <h3>Competency Area Scores</h3>
@@ -862,6 +862,75 @@
                     radarChart.destroy();
                 }
                 
+                // Add grid lines that extend in all directions
+                const gridLines = {
+                    id: 'gridLines',
+                    beforeDraw: (chart) => {
+                        const ctx = chart.ctx;
+                        const xCenter = chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2;
+                        const yCenter = chart.chartArea.top + (chart.chartArea.bottom - chart.chartArea.top) / 2;
+                        const radius = Math.min(chart.chartArea.right - chart.chartArea.left, chart.chartArea.bottom - chart.chartArea.top) / 2;
+                        
+                        // Draw vertical and horizontal lines
+                        ctx.save();
+                        ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+                        ctx.lineWidth = 1;
+                        
+                        // Vertical line
+                        ctx.beginPath();
+                        ctx.moveTo(xCenter, yCenter - radius);
+                        ctx.lineTo(xCenter, yCenter + radius);
+                        ctx.stroke();
+                        
+                        // Horizontal line
+                        ctx.beginPath();
+                        ctx.moveTo(xCenter - radius, yCenter);
+                        ctx.lineTo(xCenter + radius, yCenter);
+                        ctx.stroke();
+                        
+                        // Draw 5 concentric circles with labels
+                        const maxValue = 5;
+                        for (let i = 1; i <= maxValue; i++) {
+                            const circleRadius = (i / maxValue) * radius;
+                            
+                            // Add small tick marks at each value point on vertical and horizontal axes
+                            ctx.beginPath();
+                            ctx.moveTo(xCenter - 5, yCenter - circleRadius);
+                            ctx.lineTo(xCenter + 5, yCenter - circleRadius);
+                            ctx.stroke();
+                            
+                            ctx.beginPath();
+                            ctx.moveTo(xCenter - 5, yCenter + circleRadius);
+                            ctx.lineTo(xCenter + 5, yCenter + circleRadius);
+                            ctx.stroke();
+                            
+                            ctx.beginPath();
+                            ctx.moveTo(xCenter - circleRadius, yCenter - 5);
+                            ctx.lineTo(xCenter - circleRadius, yCenter + 5);
+                            ctx.stroke();
+                            
+                            ctx.beginPath();
+                            ctx.moveTo(xCenter + circleRadius, yCenter - 5);
+                            ctx.lineTo(xCenter + circleRadius, yCenter + 5);
+                            ctx.stroke();
+                            
+                            // Add value labels at the ends of the axes
+                            if (i === maxValue) {
+                                ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+                                ctx.font = '10px Arial';
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'middle';
+                                ctx.fillText(i.toString(), xCenter, yCenter - radius - 15);
+                                ctx.fillText(i.toString(), xCenter, yCenter + radius + 15);
+                                ctx.fillText(i.toString(), xCenter - radius - 15, yCenter);
+                                ctx.fillText(i.toString(), xCenter + radius + 15, yCenter);
+                            }
+                        }
+                        
+                        ctx.restore();
+                    }
+                };
+                
                 radarChart = new Chart(ctx, {
                     type: 'radar',
                     data: {
@@ -877,14 +946,39 @@
                             pointHoverBorderColor: 'rgba(52, 152, 219, 1)'
                         }]
                     },
+                    plugins: [gridLines],
                     options: {
                         scales: {
                             r: {
                                 angleLines: {
                                     display: true
                                 },
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.1)',
+                                    circular: true
+                                },
+                                ticks: {
+                                    backdropColor: 'transparent',
+                                    showLabelBackdrop: false
+                                },
+                                pointLabels: {
+                                    font: {
+                                        size: 12,
+                                        weight: 'bold'
+                                    }
+                                },
+                                beginAtZero: true,
                                 suggestedMin: 0,
                                 suggestedMax: 5
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `Score: ${context.raw.toFixed(1)} / 5`;
+                                    }
+                                }
                             }
                         }
                     }
