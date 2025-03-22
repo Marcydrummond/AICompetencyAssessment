@@ -1,0 +1,1433 @@
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .options {
+                padding-left: 10px;
+            }
+            
+            .export-buttons {
+                flex-direction: column;
+            }
+            
+            .chart-container {
+                height: 450px; /* Adjusted for mobile */
+                padding: 10px;
+            }
+            
+            .competency-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .competency-score {
+                margin-top: 5px;
+            }
+        }<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educator AI Competency Self-Assessment</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #f39c12;
+            --dark-color: #34495e;
+            --light-color: #ecf0f1;
+            --danger-color: #e74c3c;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        
+        h1, h2, h3, h4 {
+            color: var(--dark-color);
+            margin-top: 1.5em;
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+        
+        .assessment-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .question-group {
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 20px;
+        }
+        
+        .question {
+            margin-bottom: 25px;
+        }
+        
+        .question p {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .option input[type="radio"] {
+            margin-top: 3px;
+            margin-right: 10px;
+        }
+        
+        .option label {
+            flex: 1;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        #results {
+            display: none;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .score-card {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        
+        .score-card-item {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .score-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .persona-level {
+            text-align: center;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            background-color: #d4e6f1;
+        }
+        
+        .persona-level h3 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+        
+        .chart-container {
+            width: 100%;
+            max-width: 800px;
+            height: 1000px; /* Further increased height to avoid overlap */
+            margin: 0 auto 40px auto; /* Increased bottom margin for more separation */
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .recommendations {
+            border-left: 4px solid var(--accent-color);
+            padding-left: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .recommendation-item {
+            margin-bottom: 15px;
+        }
+
+        .persona-description {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .export-options {
+            margin-top: 30px;
+            padding: 15px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .export-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .export-btn {
+            background-color: var(--dark-color);
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        .export-btn:hover {
+            background-color: #2c3e50;
+        }
+        
+        .level-legend {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: var(--light-color);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3px;
+        }
+        
+        .color-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        /* Skill level indicator for each competency area */
+        .competency-level {
+            margin-top: 50px;
+        }
+        
+        .competency-level h3 {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .competency-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .competency-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .competency-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .competency-score {
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 20px;
+            color: white;
+        }
+        
+        .score-1 {
+            background-color: rgba(231, 76, 60, 0.7);
+        }
+        
+        .score-2 {
+            background-color: rgba(243, 156, 18, 0.7);
+        }
+        
+        .score-3 {
+            background-color: rgba(46, 204, 113, 0.7);
+        }
+        
+        .score-4, .score-5 {
+            background-color: rgba(52, 152, 219, 0.7);
+        }
+        
+        <!-- Add this style for clear separation between sections -->
+        .section-divider {
+            height: 2px;
+            background-color: #e0e0e0;
+            margin: 50px 0;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <h1>Educator AI Competency Self-Assessment</h1>
+    
+    <div class="assessment-container">
+        <p>This assessment will help determine your current AI competency level based on the Educator AI Competency Framework and at the conclusion will provide you with a personal profile.</p>
+        
+        <form id="assessment-form">
+            <!-- Technical AI Skills -->
+            <div class="question-group">
+                <h2>1. Technical AI Skills</h2>
+                <p><em>These questions assess your ability to use and understand generative AI and other AI-enhanced educational tools</em></p>
+                
+                <div class="question">
+                    <p>Q1.1: How would you rate your familiarity with using generative AI tools (like ChatGPT, Claude, Perplexity, Gemini, Microsoft Copilot) in educational settings?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q1-1" name="q1" value="1" required>
+                            <label for="q1-1">1. I have minimal experience with generative AI tools</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q1-2" name="q1" value="2">
+                            <label for="q1-2">2. I occasionally use generative AI for simple tasks like generating ideas or answering basic questions</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q1-3" name="q1" value="3">
+                            <label for="q1-3">3. I regularly use generative AI tools for multiple educational purposes (content creation, feedback, planning, research, etc.)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q1-4" name="q1" value="4">
+                            <label for="q1-4">4. I can craft effective prompts to customize generative AI outputs for specific needs or objectives</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q1-5" name="q1" value="5">
+                            <label for="q1-5">5. I can integrate generative AI into educational workflows or develop custom implementations</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q1.2: How do you interact with AI features embedded in educational technologies your institution uses?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q2-1" name="q2" value="1" required>
+                            <label for="q2-1">1. I'm largely unaware of AI features in our institutional systems</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q2-2" name="q2" value="2">
+                            <label for="q2-2">2. I use basic AI features when they're obvious (like automated grading or personalization systems)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q2-3" name="q2" value="3">
+                            <label for="q2-3">3. I intentionally utilize multiple AI-enhanced features across institutional platforms</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q2-4" name="q2" value="4">
+                            <label for="q2-4">4. I adapt my practices to leverage AI capabilities in institutional systems</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q2-5" name="q2" value="5">
+                            <label for="q2-5">5. I help evaluate, configure, and/or inprove AI features within institutional platforms</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q1.3: How comfortable are you with evaluating and improving the quality of AI-generated content?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q3-1" name="q3" value="1" required>
+                            <label for="q3-1">1. I have limited ability to judge the quality of AI outputs</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q3-2" name="q3" value="2">
+                            <label for="q3-2">2. I can recognize basic issues in AI-generated content (factual errors, repetition)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q3-3" name="q3" value="3">
+                            <label for="q3-3">3. I can effectively review and edit AI-generated materials before using them</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q3-4" name="q3" value="4">
+                            <label for="q3-4">4. I can identify patterns in AI performance and adjust my prompts accordingly</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q3-5" name="q3" value="5">
+                            <label for="q3-5">5. I can systematically evaluate AI outputs and develop strategies to enhance output quality</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Implementation and Integration -->
+            <div class="question-group">
+                <h2>2. AI Implementation and Integration</h2>
+                <p><em>These questions assess how you incorporate AI into your work</em></p>
+                
+                <div class="question">
+                    <p>Q2.1: How frequently do you integrate AI tools into your work?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q4-1" name="q4" value="1" required>
+                            <label for="q4-1">1. Rarely or never</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q4-2" name="q4" value="2">
+                            <label for="q4-2">2. Occasionally for specific tasks</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q4-3" name="q4" value="3">
+                            <label for="q4-3">3. Regularly across multiple aspects of my work</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q4-4" name="q4" value="4">
+                            <label for="q4-4">4. Extensively, with AI tools integrated into most of my work</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q4-5" name="q4" value="5">
+                            <label for="q4-5">5. Comprehensively, leading AI integration initiatives beyond my immediate role</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q2.2: Which statement best describes how you implement AI?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q5-1" name="q5" value="1" required>
+                            <label for="q5-1">1. I occasionally use AI tools for personal productivity</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q5-2" name="q5" value="2">
+                            <label for="q5-2">2. I experiment with AI tools to enhance specific activities</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q5-3" name="q5" value="3">
+                            <label for="q5-3">3. I systematically integrate AI tools into my regular practice</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q5-4" name="q5" value="4">
+                            <label for="q5-4">4. I design experiences or other solutions that meaningfully incorporate multiple AI tools</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q5-5" name="q5" value="5">
+                            <label for="q5-5">5. I develop strategic plans for AI implementation at a departmental or institutional level</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q2.3: How do you approach tasks, work, creation activities, etc. in relation to AI?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q6-1" name="q6" value="1" required>
+                            <label for="q6-1">1. I make minimal adaptations to accommodate AI</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q6-2" name="q6" value="2">
+                            <label for="q6-2">2. I modify existing materials to incorporate AI tools</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q6-3" name="q6" value="3">
+                            <label for="q6-3">3. I redesign activities and materials specifically for AI integration</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q6-4" name="q6" value="4">
+                            <label for="q6-4">4. I create new experiences or solutions that leverage AI capabilities</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q6-5" name="q6" value="5">
+                            <label for="q6-5">5. I develop frameworks for AI integration across use cases, departments, the institution</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Literacy and Awareness -->
+            <div class="question-group">
+                <h2>3. AI Literacy and Awareness</h2>
+                <p><em>These questions assess understanding of AI concepts, capabilities, and limitations</em></p>
+                
+                <div class="question">
+                    <p>Q3.1: How would you rate your understanding of AI concepts and terminology?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q7-1" name="q7" value="1" required>
+                            <label for="q7-1">1. I understand basic terms like "artificial intelligence" and "chatbot"</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q7-2" name="q7" value="2">
+                            <label for="q7-2">2. I can explain fundamental AI concepts to colleagues</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q7-3" name="q7" value="3">
+                            <label for="q7-3">3. I understand different types of AI and their educational applications</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q7-4" name="q7" value="4">
+                            <label for="q7-4">4. I have in-depth knowledge of how AI systems work and are trained</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q7-5" name="q7" value="5">
+                            <label for="q7-5">5. I can explain complex AI concepts and contribute to discussions about AI advancement</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q3.2: How well do you understand AI's limitations and potential biases?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q8-1" name="q8" value="1" required>
+                            <label for="q8-1">1. I have limited awareness of AI limitations</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q8-2" name="q8" value="2">
+                            <label for="q8-2">2. I recognize that AI can make errors and has limitations</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q8-3" name="q8" value="3">
+                            <label for="q8-3">3. I can identify specific types of biases and limitations in AI systems</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q8-4" name="q8" value="4">
+                            <label for="q8-4">4. I evaluate AI tools with an understanding of their underlying limitations</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q8-5" name="q8" value="5">
+                            <label for="q8-5">5. I can conduct systematic analyses of AI systems for biases and limitations</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q3.3: How do you stay informed about developments in AI for education?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q9-1" name="q9" value="1" required>
+                            <label for="q9-1">1. I occasionally see news about AI</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q9-2" name="q9" value="2">
+                            <label for="q9-2">2. I read articles about AI in education</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q9-3" name="q9" value="3">
+                            <label for="q9-3">3. I follow specific sources for updates on AI in education</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q9-4" name="q9" value="4">
+                            <label for="q9-4">4. I participate in professional development focused on AI</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q9-5" name="q9" value="5">
+                            <label for="q9-5">5. I contribute to knowledge about AI in education through research or publications</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Responsible AI Use -->
+            <div class="question-group">
+                <h2>4. Responsible AI Use</h2>
+                <p><em>These questions assess awareness and application of AI responsible use principles</em></p>
+                
+                <div class="question">
+                    <p>Q4.1: How would you rate your knowledge of responsible AI use?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q10-1" name="q10" value="1" required>
+                            <label for="q10-1">1. I have limited awareness of responsible use issues</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q10-2" name="q10" value="2">
+                            <label for="q10-2">2. I recognize some responsible use considerations like privacy</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q10-3" name="q10" value="3">
+                            <label for="q10-3">3. I understand multiple responsible use dimensions</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q10-4" name="q10" value="4">
+                            <label for="q10-4">4. I evaluate AI tools through a comprehensive responsible use framework</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q10-5" name="q10" value="5">
+                            <label for="q10-5">5. I help develop policies or guidelines for responsible AI use</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q4.2: How do you address privacy and data security when using AI tools?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q11-1" name="q11" value="1" required>
+                            <label for="q11-1">1. I haven't considered these issues in depth</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q11-2" name="q11" value="2">
+                            <label for="q11-2">2. I follow basic guidelines provided by my institution</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q11-3" name="q11" value="3">
+                            <label for="q11-3">3. I actively evaluate the privacy implications of AI tools I use</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q11-4" name="q11" value="4">
+                            <label for="q11-4">4. I implement protocols to ensure data privacy with AI tools</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q11-5" name="q11" value="5">
+                            <label for="q11-5">5. I develop or contribute to institutional policies on AI privacy and security</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q4.3: How do you address biases, digital equity, and digital accessibility when implementing AI tools?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q12-1" name="q12" value="1" required>
+                            <label for="q12-1">1. I have limited awareness of AI biases and accessibility issues</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q12-2" name="q12" value="2">
+                            <label for="q12-2">2. I recognize that AI tools may contain biases and present barriers for some learners</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q12-3" name="q12" value="3">
+                            <label for="q12-3">3. I evaluate AI tools for potential biases and accessibility features before implementation</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q12-4" name="q12" value="4">
+                            <label for="q12-4">4. I actively adapt AI implementation to mitigate biases and ensure all students can benefit regardless of their abilities or circumstances</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q12-5" name="q12" value="5">
+                            <label for="q12-5">5. I develop approaches that use AI to identify and address biases while enhancing accessibility and closing digital equity gaps</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Leadership and Collaboration -->
+            <div class="question-group">
+                <h2>5. AI Leadership and Collaboration</h2>
+                <p><em>These questions assess how you influence others in AI adoption</em></p>
+                
+                <div class="question">
+                    <p>Q5.1: How often do you collaborate with colleagues on AI implementation?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q13-1" name="q13" value="1" required>
+                            <label for="q13-1">1. Rarely or never</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q13-2" name="q13" value="2">
+                            <label for="q13-2">2. Occasionally discuss AI tools with colleagues</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q13-3" name="q13" value="3">
+                            <label for="q13-3">3. Regularly share AI practices with department members</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q13-4" name="q13" value="4">
+                            <label for="q13-4">4. Lead collaborative projects involving AI tools</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q13-5" name="q13" value="5">
+                            <label for="q13-5">5. Facilitate department-wide or organization-wide AI initiatives</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q5.2: How do you contribute to others' AI knowledge and skills?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q14-1" name="q14" value="1" required>
+                            <label for="q14-1">1. I don't typically share AI knowledge with others</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q14-2" name="q14" value="2">
+                            <label for="q14-2">2. I informally share experiences with AI tools</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q14-3" name="q14" value="3">
+                            <label for="q14-3">3. I guide colleagues in effective AI tool use</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q14-4" name="q14" value="4">
+                            <label for="q14-4">4. I develop resources or conduct workshops on AI use</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q14-5" name="q14" value="5">
+                            <label for="q14-5">5. I mentor others in strategic AI implementation</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q5.3: What role do you play in shaping AI policies or practices in your role/institution?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q15-1" name="q15" value="1" required>
+                            <label for="q15-1">1. No significant role in policy or practice development</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q15-2" name="q15" value="2">
+                            <label for="q15-2">2. I offer input when asked about AI tools</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q15-3" name="q15" value="3">
+                            <label for="q15-3">3. I actively contribute to discussions about AI practices</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q15-4" name="q15" value="4">
+                            <label for="q15-4">4. I help develop guidelines for AI implementation</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q15-5" name="q15" value="5">
+                            <label for="q15-5">5. I lead the development of AI strategies and policies</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Innovation with AI -->
+            <div class="question-group">
+                <h2>6. Innovation with AI</h2>
+                <p><em>These questions assess how you, through the use of AI, innovate personal/institutional practices or processes to improve student and/or institutional outcomes</em></p>
+                
+                <div class="question">
+                    <p>Q6.1: How do you use AI to adapt or innovate?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q16-1" name="q16" value="1" required>
+                            <label for="q16-1">1. I have limited experience with innovation through AI</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q16-2" name="q16" value="2">
+                            <label for="q16-2">2. I occasionally experiment with AI features to improve results</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q16-3" name="q16" value="3">
+                            <label for="q16-3">3. I regularly and deliberately implement AI tools to improve practices or processes</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q16-4" name="q16" value="4">
+                            <label for="q16-4">4. I design comprehensive solutions using AI</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q16-5" name="q16" value="5">
+                            <label for="q16-5">5. I develop or evaluate AI systems to improve student or institutional outcomes</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q6.2: How do you adapt your practice based on insights from AI tools?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q17-1" name="q17" value="1" required>
+                            <label for="q17-1">1. I make few adaptations based on AI</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q17-2" name="q17" value="2">
+                            <label for="q17-2">2. I occasionally adjust activities based on AI feedback</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q17-3" name="q17" value="3">
+                            <label for="q17-3">3. I regularly modify approaches based on AI-generated insights</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q17-4" name="q17" value="4">
+                            <label for="q17-4">4. I systematically use AI analytics to inform practice changes</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q17-5" name="q17" value="5">
+                            <label for="q17-5">5. I implement data-driven improvement cycles using AI analytics</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q6.3: How do you measure the impact of AI implementation on outcomes?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q18-1" name="q18" value="1" required>
+                            <label for="q18-1">1. I don't formally measure AI impact</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q18-2" name="q18" value="2">
+                            <label for="q18-2">2. I collect anecdotal feedback about AI tool use</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q18-3" name="q18" value="3">
+                            <label for="q18-3">3. I use basic metrics to evaluate AI effectiveness</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q18-4" name="q18" value="4">
+                            <label for="q18-4">4. I implement systematic evaluation of AI impact</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q18-5" name="q18" value="5">
+                            <label for="q18-5">5. I design research or evaluation frameworks to assess AI implementation</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" id="submit-btn">Calculate My AI Competency Profile</button>
+        </form>
+    </div>
+    
+    <div id="results">
+        <h2>Your AI Competency Profile</h2>
+        
+        <div class="persona-level">
+            <h3 id="persona-title">Your AI Educator Persona</h3>
+            <div id="persona-description" class="persona-description"></div>
+        </div>
+        
+        <div class="score-card">
+            <div class="score-card-item">
+                <div class="score-value" id="overall-score">0</div>
+                <h3>Overall Score</h3>
+                <p>Based on all competency areas</p>
+            </div>
+            <div class="score-card-item" id="highest-area-card">
+                <div class="score-value strongest-area-score">-</div>
+                <h3>Strongest Area</h3>
+                <p class="strongest-area-name">-</p>
+            </div>
+            <div class="score-card-item" id="lowest-area-card">
+                <div class="score-value growth-area-score">-</div>
+                <h3>Growth Area</h3>
+                <p class="growth-area-name">-</p>
+            </div>
+        </div>
+        
+        <h3>Competency Area Scores</h3>
+        <div class="chart-container">
+            <canvas id="competency-chart"></canvas>
+        </div>
+        
+        <div class="section-divider"></div>
+        
+        <div class="competency-level">
+            <h3>Detailed Competency Breakdown</h3>
+            <!-- Competency breakdown items will be inserted here dynamically -->
+        </div>
+        
+        <div class="section-divider"></div>
+        
+        <div class="recommendations">
+            <h3>Recommendations for Growth</h3>
+            <div id="recommendations-list"></div>
+        </div>
+        
+        <div class="export-options">
+            <h3>Export Results</h3>
+            <div class="export-buttons">
+                <button id="export-pdf" class="export-btn">Download Complete Report (PDF)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Chart.js for the chart -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <!-- Include jsPDF for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Include html2canvas for chart capture -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('assessment-form');
+            const results = document.getElementById('results');
+            const overallScoreElement = document.getElementById('overall-score');
+            const personaTitle = document.getElementById('persona-title');
+            const personaDescription = document.getElementById('persona-description');
+            const recommendationsList = document.getElementById('recommendations-list');
+            const exportPdfBtn = document.getElementById('export-pdf');
+            let competencyChart = null;
+            let currentScores = null;
+            let currentPersona = null;
+            let currentRecommendations = null;
+            
+            // Define the persona levels
+            const personas = [
+                {
+                    level: 1,
+                    name: "Incidental User",
+                    description: "You are aware of AI's existence and occasionally use basic AI tools. You have a general understanding of AI capabilities but may be apprehensive about its role in education. To advance, focus on exploring AI tools specifically designed for educational contexts."
+                },
+                {
+                    level: 2,
+                    name: "Active Explorer",
+                    description: "You actively discover and experiment with AI-powered educational resources. You've gained proficiency in a limited number of AI applications relevant to education and are enhancing your ability to interpret AI outputs. Focus on systematic integration of these tools into your regular practice."
+                },
+                {
+                    level: 3,
+                    name: "Informed Integrator",
+                    description: "You regularly combine multiple AI tools in your practices, adapting your approach to include AI-enhanced content and activities. You effectively guide others in responsible AI use. Consider developing more advanced customization skills and thought leadership in your area."
+                },
+                {
+                    level: 4,
+                    name: "Creative Adapter",
+                    description: "You implement and customize AI tools at an advanced level, designing educational experiences that incorporate AI meaningfully. You're becoming a thought leader who mentors others in AI adoption. Focus on strategic institutional implementation and measuring impact."
+                },
+                {
+                    level: 5,
+                    name: "Value Creator",
+                    description: "You're engaged in developing new AI-powered educational tools or applications. You implement AI strategically at the institutional level, measure its impact, and contribute to research on AI in education. Continue leading innovation and policy development."
+                }
+            ];
+            
+            // Define competency clusters
+            const competencyClusters = [
+                { id: "technical", name: "Technical AI Skills", questions: [1, 2, 3] },
+                { id: "implementation", name: "AI Implementation", questions: [4, 5, 6] },
+                { id: "literacy", name: "AI Literacy", questions: [7, 8, 9] },
+                { id: "responsible use", name: "Responsible AI Use", questions: [10, 11, 12] },
+                { id: "leadership", name: "AI Leadership", questions: [13, 14, 15] },
+                { id: "innovation", name: "AI Innovation", questions: [16, 17, 18] }
+            ];
+            
+            // Recommendations based on competency level
+            const recommendations = {
+                technical: [
+                    "Start exploring beginner-friendly AI tools like ChatGPT or Microsoft Copilot for basic tasks.",
+                    "Experiment with different generative AI tools and compare their outputs for educational tasks.",
+                    "Practice creating effective prompts for generative AI tools and implement them in multiple contexts.",
+                    "Learn about API integration or advanced prompting techniques to customize AI outputs.",
+                    "Share your technical expertise through workshops or publications."
+                ],
+                implementation: [
+                    "Identify one educational activity where AI could enhance the experience.",
+                    "Plan the systematic integration of AI tools across several educational activities.",
+                    "Redesign curriculum elements to meaningfully incorporate AI tools.",
+                    "Create comprehensive AI-enhanced learning experiences and evaluate their effectiveness.",
+                    "Develop strategic frameworks for AI integration across your institution."
+                ],
+                literacy: [
+                    "Take an introductory course on AI concepts and terminology.",
+                    "Join online communities focused on AI in education.",
+                    "Follow research on AI applications and limitations in educational settings.",
+                    "Participate in advanced professional development on AI systems.",
+                    "Contribute to knowledge through research, publications, or presentations."
+                ],
+                "responsible use": [
+                    "Learn about basic responsible use considerations in AI use, particularly privacy concerns.",
+                    "Explore resources on AI biases and other responsible use issues.",
+                    "Develop protocols for evaluating AI tools through a responsible use lens before implementation.",
+                    "Create guidelines for responsible AI use in your context.",
+                    "Lead institutional policy development around responsible AI implementation."
+                ],
+                leadership: [
+                    "Start sharing your AI experiences with interested colleagues.",
+                    "Organize informal discussions about AI tools with department members.",
+                    "Lead a small working group on AI implementation.",
+                    "Develop resources or workshops on AI use for colleagues.",
+                    "Establish department-wide and/or institution-wide AI initiatives and mentorship programs."
+                ],
+                innovation: [
+                    "Identify how AI might help improve practices, processes and/or student/institutional outcomes.",
+                    "Experiment with AI features that lead to improved practices or processes.",
+                    "Implement AI tools deliberately to improve processes/practices and outcomes.",
+                    "Design soltuions using AI.",
+                    "Develop frameworks for measuring AI's impact on outcomes."
+                ]
+            };
+            
+            // Function to calculate scores
+            function calculateScores() {
+                const formData = new FormData(form);
+                
+                // Calculate cluster scores
+                const clusterScores = competencyClusters.map(cluster => {
+                    let total = 0;
+                    
+                    cluster.questions.forEach(q => {
+                        total += parseInt(formData.get('q' + q)) || 0;
+                    });
+                    
+                    return {
+                        id: cluster.id,
+                        name: cluster.name,
+                        score: total / cluster.questions.length
+                    };
+                });
+                
+                // Calculate overall score
+                const totalScore = clusterScores.reduce((sum, cluster) => sum + cluster.score, 0);
+                const overallScore = totalScore / clusterScores.length;
+                
+                return {
+                    overall: overallScore,
+                    clusters: clusterScores
+                };
+            }
+            
+            // Function to determine persona level
+            function determinePersona(score) {
+                const level = Math.round(score);
+                return personas.find(p => p.level === level) || personas[0];
+            }
+            
+            // Function to get recommendations
+            function getRecommendations(clusterScores) {
+                return clusterScores.map(cluster => {
+                    const level = Math.min(Math.floor(cluster.score), 4); // 0-4 index
+                    return {
+                        cluster: cluster.name,
+                        recommendation: recommendations[cluster.id][level]
+                    };
+                });
+            }
+            
+            // Function to create horizontal bar chart
+            function createHorizontalBarChart(clusterScores) {
+                const ctx = document.getElementById('competency-chart').getContext('2d');
+                
+                if (window.competencyChart) {
+                    window.competencyChart.destroy();
+                }
+                
+                // Define color scheme based on score
+                function getBarColor(score) {
+                    if (score < 2) return 'rgba(231, 76, 60, 0.7)'; // Red for lower scores
+                    if (score < 3) return 'rgba(243, 156, 18, 0.7)'; // Orange for mid-low scores
+                    if (score < 4) return 'rgba(46, 204, 113, 0.7)'; // Green for mid-high scores
+                    return 'rgba(52, 152, 219, 0.7)'; // Blue for high scores
+                }
+                
+                // Sort data from highest to lowest score for better visualization
+                const sortedData = [...clusterScores].sort((a, b) => b.score - a.score);
+                
+                window.competencyChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: sortedData.map(c => c.name),
+                        datasets: [{
+                            label: 'Competency Score',
+                            data: sortedData.map(c => c.score),
+                            backgroundColor: sortedData.map(c => getBarColor(c.score)),
+                            borderColor: sortedData.map(c => getBarColor(c.score).replace('0.7', '1')),
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',  // This makes the bars horizontal
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                max: 5,
+                                ticks: {
+                                    stepSize: 1,
+                                    callback: function(value) {
+                                        return value.toFixed(0);
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.1)'
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Score (0-5)',
+                                    font: {
+                                        weight: 'bold'
+                                    }
+                                }
+                            },
+                            y: {
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `Score: ${context.raw.toFixed(1)} / 5`;
+                                    },
+                                    afterLabel: function(context) {
+                                        const score = context.raw;
+                                        let level;
+                                        if (score < 1.5) level = "Incidental User";
+                                        else if (score < 2.5) level = "Active Explorer";
+                                        else if (score < 3.5) level = "Informed Integrator";
+                                        else if (score < 4.5) level = "Creative Adapter";
+                                        else level = "Value Creator";
+                                        
+                                        return `Level: ${level}`;
+                                    }
+                                }
+                            },
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+                
+                // Add explanation of color coding inside the chart container (not below)
+                const chartContainer = document.querySelector('.chart-container');
+                const legendElement = document.createElement('div');
+                legendElement.className = 'level-legend';
+                legendElement.style.marginBottom = '20px'; // Add margin to separate from chart
+                legendElement.innerHTML = `
+                    <div class="legend-title">Score Levels:</div>
+                    <div class="legend-item"><span class="color-dot" style="background-color: rgba(231, 76, 60, 0.7)"></span> 1: Incidental User</div>
+                    <div class="legend-item"><span class="color-dot" style="background-color: rgba(243, 156, 18, 0.7)"></span> 2: Active Explorer</div>
+                    <div class="legend-item"><span class="color-dot" style="background-color: rgba(46, 204, 113, 0.7)"></span> 3: Informed Integrator</div>
+                    <div class="legend-item"><span class="color-dot" style="background-color: rgba(52, 152, 219, 0.7)"></span> 4-5: Creative Adapter/Value Creator</div>
+                `;
+                
+                // Remove existing legend if it exists
+                const existingLegend = chartContainer.querySelector('.level-legend');
+                if (existingLegend) {
+                    existingLegend.remove();
+                }
+                
+                // Insert at the beginning of chart container (before the canvas)
+                chartContainer.insertBefore(legendElement, chartContainer.firstChild);
+            }
+            
+            // Add this new function to create a detailed breakdown of each competency area
+            function createCompetencyBreakdown(clusterScores) {
+                // Get the competency level section
+                const breakdownSection = document.querySelector('.competency-level');
+                
+                // Clear existing content if it exists
+                while (breakdownSection.childNodes.length > 2) {
+                    breakdownSection.removeChild(breakdownSection.lastChild);
+                }
+                
+                // Sort competencies from highest to lowest score
+                const sortedClusters = [...clusterScores].sort((a, b) => b.score - a.score);
+                
+                // Create a section for each competency area
+                sortedClusters.forEach(cluster => {
+                    const scoreRounded = Math.round(cluster.score);
+                    const competencyItem = document.createElement('div');
+                    competencyItem.className = 'competency-item';
+                    
+                    // Determine level name based on score
+                    let levelName;
+                    if (scoreRounded === 1) levelName = "Incidental User";
+                    else if (scoreRounded === 2) levelName = "Active Explorer";
+                    else if (scoreRounded === 3) levelName = "Informed Integrator";
+                    else if (scoreRounded === 4) levelName = "Creative Adapter";
+                    else levelName = "Value Creator";
+                    
+                    competencyItem.innerHTML = `
+                        <div class="competency-header">
+                            <div class="competency-name">${cluster.name}</div>
+                            <div class="competency-score score-${scoreRounded}">${cluster.score.toFixed(1)}</div>
+                        </div>
+                        <div class="competency-level-name">Level: ${levelName}</div>
+                        <div class="competency-recommendation">
+                            <strong>Next step:</strong> ${recommendations[cluster.id][Math.min(scoreRounded - 1, 4)]}
+                        </div>
+                    `;
+                    
+                    breakdownSection.appendChild(competencyItem);
+                });
+            }
+            
+            // Store user responses for the PDF report
+            let userResponses = {};
+            
+            // Form submission handler
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Collect user responses
+                const formData = new FormData(form);
+                for (let i = 1; i <= 18; i++) {
+                    userResponses['q' + i] = formData.get('q' + i);
+                }
+                
+                const scores = calculateScores();
+                currentScores = scores;
+                const persona = determinePersona(scores.overall);
+                currentPersona = persona;
+                const userRecommendations = getRecommendations(scores.clusters);
+                currentRecommendations = userRecommendations;
+                
+                // Find strongest and growth areas
+                const sortedClusters = [...scores.clusters].sort((a, b) => b.score - a.score);
+                const strongestArea = sortedClusters[0];
+                const growthArea = sortedClusters[sortedClusters.length - 1];
+                
+                // Update the results UI
+                overallScoreElement.textContent = scores.overall.toFixed(1);
+                personaTitle.textContent = persona.name;
+                personaDescription.textContent = persona.description;
+                
+                // Update strongest and growth areas
+                document.querySelector('.strongest-area-score').textContent = strongestArea.score.toFixed(1);
+                document.querySelector('.strongest-area-name').textContent = strongestArea.name;
+                document.querySelector('.growth-area-score').textContent = growthArea.score.toFixed(1);
+                document.querySelector('.growth-area-name').textContent = growthArea.name;
+                
+                // Create recommendations list
+                recommendationsList.innerHTML = '';
+                userRecommendations.forEach(rec => {
+                    const recItem = document.createElement('div');
+                    recItem.className = 'recommendation-item';
+                    recItem.innerHTML = `<strong>${rec.cluster}:</strong> ${rec.recommendation}`;
+                    recommendationsList.appendChild(recItem);
+                });
+                
+                // Create horizontal bar chart
+                createHorizontalBarChart(scores.clusters);
+                
+                // Add detailed competency breakdown section
+                createCompetencyBreakdown(scores.clusters);
+                
+                // Show results
+                results.style.display = 'block';
+                
+                // Scroll to results
+                results.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Export PDF function
+            exportPdfBtn.addEventListener('click', function() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('p', 'mm', 'a4');
+                const width = doc.internal.pageSize.getWidth();
+                const margin = 20;
+                let yPos = 20;
+                
+                // Title
+                doc.setFontSize(20);
+                doc.setTextColor(52, 152, 219);
+                doc.text('Educator AI Competency Assessment Report', width/2, yPos, { align: 'center' });
+                yPos += 15;
+                
+                // Persona
+                doc.setFontSize(16);
+                doc.setTextColor(52, 152, 219);
+                doc.text(`AI Educator Persona: ${currentPersona.name}`, width/2, yPos, { align: 'center' });
+                yPos += 10;
+                
+                // Overall Score and Strongest/Growth Areas
+                doc.setFontSize(14);
+                doc.setTextColor(0, 0, 0);
+                
+                const sortedClusters = [...currentScores.clusters].sort((a, b) => b.score - a.score);
+                const strongestArea = sortedClusters[0];
+                const growthArea = sortedClusters[sortedClusters.length - 1];
+                
+                doc.text(`Overall Score: ${currentScores.overall.toFixed(1)}`, margin, yPos);
+                yPos += 8;
+                doc.text(`Strongest Area: ${strongestArea.name} (${strongestArea.score.toFixed(1)})`, margin, yPos);
+                yPos += 8;
+                doc.text(`Growth Area: ${growthArea.name} (${growthArea.score.toFixed(1)})`, margin, yPos);
+                yPos += 12;
+                
+                // Persona Description
+                doc.setFontSize(12);
+                const splitDesc = doc.splitTextToSize(currentPersona.description, width - 2*margin);
+                doc.text(splitDesc, margin, yPos);
+                yPos += splitDesc.length * 7;
+                
+                // Capture Chart
+                html2canvas(document.getElementById('competency-chart')).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    
+                    // Add some space before chart
+                    yPos += 10;
+                    
+                    // Add chart title
+                    doc.setFontSize(14);
+                    doc.text('Competency Areas Profile', margin, yPos);
+                    yPos += 8;
+                    
+                    // Add chart to PDF
+                    const imgWidth = 170;
+                    const imgHeight = canvas.height * imgWidth / canvas.width;
+                    doc.addImage(imgData, 'PNG', (width - imgWidth)/2, yPos, imgWidth, imgHeight);
+                    yPos += imgHeight + 15;
+                    
+                    // Add detailed competency breakdown
+                    doc.setFontSize(14);
+                    doc.text('Detailed Competency Breakdown', margin, yPos);
+                    yPos += 8;
+                    
+                    doc.setFontSize(12);
+                    
+                    // Draw each competency area with its details
+                    sortedClusters.forEach(cluster => {
+                        const scoreRounded = Math.round(cluster.score);
+                        
+                        // Determine level name based on score
+                        let levelName;
+                        if (scoreRounded === 1) levelName = "Incidental User";
+                        else if (scoreRounded === 2) levelName = "Active Explorer";
+                        else if (scoreRounded === 3) levelName = "Informed Integrator";
+                        else if (scoreRounded === 4) levelName = "Creative Adapter";
+                        else levelName = "Value Creator";
+                        
+                        // Check if we need a new page
+                        if (yPos + 30 > doc.internal.pageSize.getHeight() - margin) {
+                            doc.addPage();
+                            yPos = 20;
+                        }
+                        
+                        doc.setFontSize(12);
+                        doc.setFont(undefined, 'bold');
+                        doc.text(`${cluster.name} - Score: ${cluster.score.toFixed(1)}`, margin, yPos);
+                        yPos += 6;
+                        
+                        doc.setFontSize(11);
+                        doc.setFont(undefined, 'normal');
+                        doc.text(`Level: ${levelName}`, margin + 5, yPos);
+                        yPos += 6;
+                        
+                        const recText = `Next step: ${recommendations[cluster.id][Math.min(scoreRounded - 1, 4)]}`;
+                        const splitRec = doc.splitTextToSize(recText, width - 2*margin - 10);
+                        doc.text(splitRec, margin + 5, yPos);
+                        yPos += splitRec.length * 6 + 10;
+                    });
+                    
+                    // Add recommendations
+                    if (yPos + 50 > doc.internal.pageSize.getHeight() - margin) {
+                        doc.addPage();
+                        yPos = 20;
+                    }
+                    
+                    doc.setFontSize(14);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('Recommendations for Growth', margin, yPos);
+                    yPos += 8;
+                    
+                    doc.setFontSize(12);
+                    doc.setFont(undefined, 'normal');
+                    currentRecommendations.forEach(rec => {
+                        const text = `${rec.cluster}: ${rec.recommendation}`;
+                        const splitRec = doc.splitTextToSize(text, width - 2*margin);
+                        
+                        // Check if we need a new page
+                        if (yPos + splitRec.length * 6 > doc.internal.pageSize.getHeight() - margin) {
+                            doc.addPage();
+                            yPos = 20;
+                        }
+                        
+                        doc.text(splitRec, margin, yPos);
+                        yPos += splitRec.length * 6 + 5;
+                    });
+                    
+                    // Add a new page for question responses
+                    doc.addPage();
+                    yPos = 20;
+                    
+                    doc.setFontSize(14);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('Your Responses', margin, yPos);
+                    yPos += 10;
+                    
+                    doc.setFontSize(12);
+                    doc.setFont(undefined, 'normal');
+                    
+                    // Group questions by competency area
+                    competencyClusters.forEach((cluster, clusterIndex) => {
+                        if (yPos + 50 > doc.internal.pageSize.getHeight() - margin) {
+                            doc.addPage();
+                            yPos = 20;
+                        }
+                        
+                        doc.setFontSize(13);
+                        doc.setFont(undefined, 'bold');
+                        doc.text(`${clusterIndex + 1}. ${cluster.name}`, margin, yPos);
+                        yPos += 8;
+                        
+                        doc.setFontSize(11);
+                        doc.setFont(undefined, 'normal');
+                        
+                        // Loop through each question in this competency area
+                        cluster.questions.forEach(qNum => {
+                            const qElement = document.querySelector(`label[for="q${qNum}-${userResponses['q' + qNum]}"]`);
+                            if (qElement) {
+                                const questionText = document.querySelector(`#q${qNum}-1`).closest('.question').querySelector('p').textContent;
+                                const responseText = qElement.textContent;
+                                
+                                const qText = `Q${Math.floor((qNum-1)/3) + 1}.${((qNum-1)%3) + 1}: ${questionText.split(':')[1].trim()}`;
+                                const splitQ = doc.splitTextToSize(qText, width - 2*margin);
+                                doc.text(splitQ, margin, yPos);
+                                yPos += splitQ.length * 5 + 2;
+                                
+                                doc.text(`Your response: ${responseText}`, margin + 5, yPos);
+                                yPos += 8;
+                            }
+                        });
+                        
+                        yPos += 5; // Extra space between competency areas
+                    });
+                    
+                    // Add date and time at the bottom
+                    const now = new Date();
+                    doc.setFontSize(10);
+                    doc.setTextColor(100, 100, 100);
+                    doc.text(`Report generated: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`, 
+                             width - margin, doc.internal.pageSize.getHeight() - 10, { align: 'right' });
+                    
+                    // Save the PDF
+                    doc.save('AI_Competency_Assessment_Report.pdf');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
