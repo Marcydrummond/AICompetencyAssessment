@@ -1,30 +1,3 @@
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            
-            .options {
-                padding-left: 10px;
-            }
-            
-            .export-buttons {
-                flex-direction: column;
-            }
-            
-            .chart-container {
-                height: 450px; /* Adjusted for mobile */
-                padding: 10px;
-            }
-            
-            .competency-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .competency-score {
-                margin-top: 5px;
-            }
-        }<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -168,15 +141,15 @@
             color: var(--primary-color);
         }
         
-        .chart-container {
-            width: 100%;
-            max-width: 800px;
-            height: 1000px; /* Further increased height to avoid overlap */
-            margin: 0 auto 40px auto; /* Increased bottom margin for more separation */
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+	.chart-container {
+        	width: 100%;
+        	max-width: 800px;
+       		height: 500px;
+        	margin: 0 auto 100px auto; /* Increased bottom margin from 40px to 60px */
+        	padding: 20px;
+        	background-color: white;
+        	border-radius: 8px;
+        	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .recommendations {
@@ -249,7 +222,7 @@
         
         /* Skill level indicator for each competency area */
         .competency-level {
-            margin-top: 50px;
+            margin-top: 80px;
         }
         
         .competency-level h3 {
@@ -304,9 +277,9 @@
         
         <!-- Add this style for clear separation between sections -->
         .section-divider {
-            height: 2px;
+            height: 3px;
             background-color: #e0e0e0;
-            margin: 50px 0;
+            margin: 80px 0;
             clear: both;
         }
     </style>
@@ -328,373 +301,7 @@
                     <div class="options">
                         <div class="option">
                             <input type="radio" id="q1-1" name="q1" value="1" required>
-                            <label for="q1-1">1. I have minimal experience with generative AI tools</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q1-2" name="q1" value="2">
-                            <label for="q1-2">2. I occasionally use generative AI for simple tasks like generating ideas or answering basic questions</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q1-3" name="q1" value="3">
-                            <label for="q1-3">3. I regularly use generative AI tools for multiple educational purposes (content creation, feedback, planning, research, etc.)</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q1-4" name="q1" value="4">
-                            <label for="q1-4">4. I can craft effective prompts to customize generative AI outputs for specific needs or objectives</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q1-5" name="q1" value="5">
-                            <label for="q1-5">5. I can integrate generative AI into educational workflows or develop custom implementations</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="question">
-                    <p>Q1.2: How do you interact with AI features embedded in educational technologies your institution uses?</p>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" id="q2-1" name="q2" value="1" required>
-                            <label for="q2-1">1. I'm largely unaware of AI features in our institutional systems</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q2-2" name="q2" value="2">
-                            <label for="q2-2">2. I use basic AI features when they're obvious (like automated grading or personalization systems)</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q2-3" name="q2" value="3">
-                            <label for="q2-3">3. I intentionally utilize multiple AI-enhanced features across institutional platforms</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q2-4" name="q2" value="4">
-                            <label for="q2-4">4. I adapt my practices to leverage AI capabilities in institutional systems</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q2-5" name="q2" value="5">
-                            <label for="q2-5">5. I help evaluate, configure, and/or inprove AI features within institutional platforms</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="question">
-                    <p>Q1.3: How comfortable are you with evaluating and improving the quality of AI-generated content?</p>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" id="q3-1" name="q3" value="1" required>
-                            <label for="q3-1">1. I have limited ability to judge the quality of AI outputs</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q3-2" name="q3" value="2">
-                            <label for="q3-2">2. I can recognize basic issues in AI-generated content (factual errors, repetition)</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q3-3" name="q3" value="3">
-                            <label for="q3-3">3. I can effectively review and edit AI-generated materials before using them</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q3-4" name="q3" value="4">
-                            <label for="q3-4">4. I can identify patterns in AI performance and adjust my prompts accordingly</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q3-5" name="q3" value="5">
-                            <label for="q3-5">5. I can systematically evaluate AI outputs and develop strategies to enhance output quality</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- AI Implementation and Integration -->
-            <div class="question-group">
-                <h2>2. AI Implementation and Integration</h2>
-                <p><em>These questions assess how you incorporate AI into your work</em></p>
-                
-                <div class="question">
-                    <p>Q2.1: How frequently do you integrate AI tools into your work?</p>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" id="q4-1" name="q4" value="1" required>
-                            <label for="q4-1">1. Rarely or never</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q4-2" name="q4" value="2">
-                            <label for="q4-2">2. Occasionally for specific tasks</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q4-3" name="q4" value="3">
-                            <label for="q4-3">3. Regularly across multiple aspects of my work</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q4-4" name="q4" value="4">
-                            <label for="q4-4">4. Extensively, with AI tools integrated into most of my work</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q4-5" name="q4" value="5">
-                            <label for="q4-5">5. Comprehensively, leading AI integration initiatives beyond my immediate role</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="question">
-                    <p>Q2.2: Which statement best describes how you implement AI?</p>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" id="q5-1" name="q5" value="1" required>
-                            <label for="q5-1">1. I occasionally use AI tools for personal productivity</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q5-2" name="q5" value="2">
-                            <label for="q5-2">2. I experiment with AI tools to enhance specific activities</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q5-3" name="q5" value="3">
-                            <label for="q5-3">3. I systematically integrate AI tools into my regular practice</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q5-4" name="q5" value="4">
-                            <label for="q5-4">4. I design experiences or other solutions that meaningfully incorporate multiple AI tools</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q5-5" name="q5" value="5">
-                            <label for="q5-5">5. I develop strategic plans for AI implementation at a departmental or institutional level</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="question">
-                    <p>Q2.3: How do you approach tasks, work, creation activities, etc. in relation to AI?</p>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" id="q6-1" name="q6" value="1" required>
-                            <label for="q6-1">1. I make minimal adaptations to accommodate AI</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q6-2" name="q6" value="2">
-                            <label for="q6-2">2. I modify existing materials to incorporate AI tools</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q6-3" name="q6" value="3">
-                            <label for="q6-3">3. I redesign activities and materials specifically for AI integration</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q6-4" name="q6" value="4">
-                            <label for="q6-4">4. I create new experiences or solutions that leverage AI capabilities</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q6-5" name="q6" value="5">
-                            <label for="q6-5">5. I develop frameworks for AI integration across use cases, departments, the institution</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- AI Literacy and Awareness -->
-            <div class="question-group">
-                <h2>3. AI Literacy and Awareness</h2>
-                <p><em>These questions assess understanding of AI concepts, capabilities, and limitations</em></p>
-                
-                <div class="question">
-                    <p>Q3.1: How would you rate your understanding of AI concepts and terminology?</p>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" id="q7-1" name="q7" value="1" required>
-                            <label for="q7-1">1. I understand basic terms like "artificial intelligence" and "chatbot"</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q7-2" name="q7" value="2">
-                            <label for="q7-2">2. I can explain fundamental AI concepts to colleagues</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q7-3" name="q7" value="3">
-                            <label for="q7-3">3. I understand different types of AI and their educational applications</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q7-4" name="q7" value="4">
-                            <label for="q7-4">4. I have in-depth knowledge of how AI systems work and are trained</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q7-5" name="q7" value="5">
-                            <label for="q7-5">5. I can explain complex AI concepts and contribute to discussions about AI advancement</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="question">
-                    <p>Q3.2: How well do you understand AI's limitations and potential biases?</p>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" id="q8-1" name="q8" value="1" required>
-                            <label for="q8-1">1. I have limited awareness of AI limitations</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q8-2" name="q8" value="2">
-                            <label for="q8-2">2. I recognize that AI can make errors and has limitations</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q8-3" name="q8" value="3">
-                            <label for="q8-3">3. I can identify specific types of biases and limitations in AI systems</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q8-4" name="q8" value="4">
-                            <label for="q8-4">4. I evaluate AI tools with an understanding of their underlying limitations</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q8-5" name="q8" value="5">
-                            <label for="q8-5">5. I can conduct systematic analyses of AI systems for biases and limitations</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="question">
-                    <p>Q3.3: How do you stay informed about developments in AI for education?</p>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" id="q9-1" name="q9" value="1" required>
-                            <label for="q9-1">1. I occasionally see news about AI</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q9-2" name="q9" value="2">
-                            <label for="q9-2">2. I read articles about AI in education</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q9-3" name="q9" value="3">
-                            <label for="q9-3">3. I follow specific sources for updates on AI in education</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q9-4" name="q9" value="4">
-                            <label for="q9-4">4. I participate in professional development focused on AI</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q9-5" name="q9" value="5">
-                            <label for="q9-5">5. I contribute to knowledge about AI in education through research or publications</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Responsible AI Use -->
-            <div class="question-group">
-                <h2>4. Responsible AI Use</h2>
-                <p><em>These questions assess awareness and application of AI responsible use principles</em></p>
-                
-                <div class="question">
-                    <p>Q4.1: How would you rate your knowledge of responsible AI use?</p>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" id="q10-1" name="q10" value="1" required>
-                            <label for="q10-1">1. I have limited awareness of responsible use issues</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q10-2" name="q10" value="2">
-                            <label for="q10-2">2. I recognize some responsible use considerations like privacy</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q10-3" name="q10" value="3">
-                            <label for="q10-3">3. I understand multiple responsible use dimensions</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q10-4" name="q10" value="4">
-                            <label for="q10-4">4. I evaluate AI tools through a comprehensive responsible use framework</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q10-5" name="q10" value="5">
-                            <label for="q10-5">5. I help develop policies or guidelines for responsible AI use</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="question">
-                    <p>Q4.2: How do you address privacy and data security when using AI tools?</p>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" id="q11-1" name="q11" value="1" required>
-                            <label for="q11-1">1. I haven't considered these issues in depth</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q11-2" name="q11" value="2">
-                            <label for="q11-2">2. I follow basic guidelines provided by my institution</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q11-3" name="q11" value="3">
-                            <label for="q11-3">3. I actively evaluate the privacy implications of AI tools I use</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q11-4" name="q11" value="4">
-                            <label for="q11-4">4. I implement protocols to ensure data privacy with AI tools</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q11-5" name="q11" value="5">
-                            <label for="q11-5">5. I develop or contribute to institutional policies on AI privacy and security</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="question">
-                    <p>Q4.3: How do you address biases, digital equity, and digital accessibility when implementing AI tools?</p>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" id="q12-1" name="q12" value="1" required>
-                            <label for="q12-1">1. I have limited awareness of AI biases and accessibility issues</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q12-2" name="q12" value="2">
-                            <label for="q12-2">2. I recognize that AI tools may contain biases and present barriers for some learners</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q12-3" name="q12" value="3">
-                            <label for="q12-3">3. I evaluate AI tools for potential biases and accessibility features before implementation</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q12-4" name="q12" value="4">
-                            <label for="q12-4">4. I actively adapt AI implementation to mitigate biases and ensure all students can benefit regardless of their abilities or circumstances</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q12-5" name="q12" value="5">
-                            <label for="q12-5">5. I develop approaches that use AI to identify and address biases while enhancing accessibility and closing digital equity gaps</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- AI Leadership and Collaboration -->
-            <div class="question-group">
-                <h2>5. AI Leadership and Collaboration</h2>
-                <p><em>These questions assess how you influence others in AI adoption</em></p>
-                
-                <div class="question">
-                    <p>Q5.1: How often do you collaborate with colleagues on AI implementation?</p>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" id="q13-1" name="q13" value="1" required>
-                            <label for="q13-1">1. Rarely or never</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q13-2" name="q13" value="2">
-                            <label for="q13-2">2. Occasionally discuss AI tools with colleagues</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q13-3" name="q13" value="3">
-                            <label for="q13-3">3. Regularly share AI practices with department members</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q13-4" name="q13" value="4">
-                            <label for="q13-4">4. Lead collaborative projects involving AI tools</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q13-5" name="q13" value="5">
-                            <label for="q13-5">5. Facilitate department-wide or organization-wide AI initiatives</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="question">
-                    <p>Q5.2: How do you contribute to others' AI knowledge and skills?</p>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" id="q14-1" name="q14" value="1" required>
-                            <label for="q14-1">1. I don't typically share AI knowledge with others</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q14-2" name="q14" value="2">
-                            <label for="q14-2">2. I informally share experiences with AI tools</label>
+                            label for="q14-2">2. I informally share experiences with AI tools</label>
                         </div>
                         <div class="option">
                             <input type="radio" id="q14-3" name="q14" value="3">
@@ -1429,5 +1036,389 @@
             });
         });
     </script>
+    
+    <!-- Add script to fix scaling issues -->
+    <script>
+        // Force reset any browser zoom when the page loads
+        window.onload = function() {
+            document.body.style.zoom = "100%";
+            // Alternative approach for Firefox
+            document.body.style.transform = "scale(1)";
+            document.body.style.transformOrigin = "0 0";
+            
+            // Force normal zoom level
+            if (window.devicePixelRatio !== 1) {
+                const displayScale = 1 / window.devicePixelRatio;
+                document.body.style.zoom = displayScale * 100 + '%';
+            }
+        };
+    </script>
 </body>
 </html>
+    1-1">1. I have minimal experience with generative AI tools</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q1-2" name="q1" value="2">
+                            <label for="q1-2">2. I occasionally use generative AI for simple tasks like generating ideas or answering basic questions</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q1-3" name="q1" value="3">
+                            <label for="q1-3">3. I regularly use generative AI tools for multiple educational purposes (content creation, feedback, planning, research, etc.)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q1-4" name="q1" value="4">
+                            <label for="q1-4">4. I can craft effective prompts to customize generative AI outputs for specific needs or objectives</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q1-5" name="q1" value="5">
+                            <label for="q1-5">5. I can integrate generative AI into educational workflows or develop custom implementations</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q1.2: How do you interact with AI features embedded in educational technologies your institution uses?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q2-1" name="q2" value="1" required>
+                            <label for="q2-1">1. I'm largely unaware of AI features in our institutional systems</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q2-2" name="q2" value="2">
+                            <label for="q2-2">2. I use basic AI features when they're obvious (like automated grading or personalization systems)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q2-3" name="q2" value="3">
+                            <label for="q2-3">3. I intentionally utilize multiple AI-enhanced features across institutional platforms</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q2-4" name="q2" value="4">
+                            <label for="q2-4">4. I adapt my practices to leverage AI capabilities in institutional systems</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q2-5" name="q2" value="5">
+                            <label for="q2-5">5. I help evaluate, configure, and/or inprove AI features within institutional platforms</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q1.3: How comfortable are you with evaluating and improving the quality of AI-generated content?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q3-1" name="q3" value="1" required>
+                            <label for="q3-1">1. I have limited ability to judge the quality of AI outputs</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q3-2" name="q3" value="2">
+                            <label for="q3-2">2. I can recognize basic issues in AI-generated content (factual errors, repetition)</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q3-3" name="q3" value="3">
+                            <label for="q3-3">3. I can effectively review and edit AI-generated materials before using them</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q3-4" name="q3" value="4">
+                            <label for="q3-4">4. I can identify patterns in AI performance and adjust my prompts accordingly</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q3-5" name="q3" value="5">
+                            <label for="q3-5">5. I can systematically evaluate AI outputs and develop strategies to enhance output quality</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Implementation and Integration -->
+            <div class="question-group">
+                <h2>2. AI Implementation and Integration</h2>
+                <p><em>These questions assess how you incorporate AI into your work</em></p>
+                
+                <div class="question">
+                    <p>Q2.1: How frequently do you integrate AI tools into your work?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q4-1" name="q4" value="1" required>
+                            <label for="q4-1">1. Rarely or never</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q4-2" name="q4" value="2">
+                            <label for="q4-2">2. Occasionally for specific tasks</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q4-3" name="q4" value="3">
+                            <label for="q4-3">3. Regularly across multiple aspects of my work</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q4-4" name="q4" value="4">
+                            <label for="q4-4">4. Extensively, with AI tools integrated into most of my work</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q4-5" name="q4" value="5">
+                            <label for="q4-5">5. Comprehensively, leading AI integration initiatives beyond my immediate role</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q2.2: Which statement best describes how you implement AI?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q5-1" name="q5" value="1" required>
+                            <label for="q5-1">1. I occasionally use AI tools for personal productivity</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q5-2" name="q5" value="2">
+                            <label for="q5-2">2. I experiment with AI tools to enhance specific activities</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q5-3" name="q5" value="3">
+                            <label for="q5-3">3. I systematically integrate AI tools into my regular practice</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q5-4" name="q5" value="4">
+                            <label for="q5-4">4. I design experiences or other solutions that meaningfully incorporate multiple AI tools</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q5-5" name="q5" value="5">
+                            <label for="q5-5">5. I develop strategic plans for AI implementation at a departmental or institutional level</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q2.3: How do you approach tasks, work, creation activities, etc. in relation to AI?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q6-1" name="q6" value="1" required>
+                            <label for="q6-1">1. I make minimal adaptations to accommodate AI</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q6-2" name="q6" value="2">
+                            <label for="q6-2">2. I modify existing materials to incorporate AI tools</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q6-3" name="q6" value="3">
+                            <label for="q6-3">3. I redesign activities and materials specifically for AI integration</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q6-4" name="q6" value="4">
+                            <label for="q6-4">4. I create new experiences or solutions that leverage AI capabilities</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q6-5" name="q6" value="5">
+                            <label for="q6-5">5. I develop frameworks for AI integration across use cases, departments, the institution</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Literacy and Awareness -->
+            <div class="question-group">
+                <h2>3. AI Literacy and Awareness</h2>
+                <p><em>These questions assess understanding of AI concepts, capabilities, and limitations</em></p>
+                
+                <div class="question">
+                    <p>Q3.1: How would you rate your understanding of AI concepts and terminology?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q7-1" name="q7" value="1" required>
+                            <label for="q7-1">1. I understand basic terms like "artificial intelligence" and "chatbot"</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q7-2" name="q7" value="2">
+                            <label for="q7-2">2. I can explain fundamental AI concepts to colleagues</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q7-3" name="q7" value="3">
+                            <label for="q7-3">3. I understand different types of AI and their educational applications</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q7-4" name="q7" value="4">
+                            <label for="q7-4">4. I have in-depth knowledge of how AI systems work and are trained</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q7-5" name="q7" value="5">
+                            <label for="q7-5">5. I can explain complex AI concepts and contribute to discussions about AI advancement</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q3.2: How well do you understand AI's limitations and potential biases?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q8-1" name="q8" value="1" required>
+                            <label for="q8-1">1. I have limited awareness of AI limitations</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q8-2" name="q8" value="2">
+                            <label for="q8-2">2. I recognize that AI can make errors and has limitations</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q8-3" name="q8" value="3">
+                            <label for="q8-3">3. I can identify specific types of biases and limitations in AI systems</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q8-4" name="q8" value="4">
+                            <label for="q8-4">4. I evaluate AI tools with an understanding of their underlying limitations</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q8-5" name="q8" value="5">
+                            <label for="q8-5">5. I can conduct systematic analyses of AI systems for biases and limitations</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q3.3: How do you stay informed about developments in AI for education?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q9-1" name="q9" value="1" required>
+                            <label for="q9-1">1. I occasionally see news about AI</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q9-2" name="q9" value="2">
+                            <label for="q9-2">2. I read articles about AI in education</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q9-3" name="q9" value="3">
+                            <label for="q9-3">3. I follow specific sources for updates on AI in education</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q9-4" name="q9" value="4">
+                            <label for="q9-4">4. I participate in professional development focused on AI</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q9-5" name="q9" value="5">
+                            <label for="q9-5">5. I contribute to knowledge about AI in education through research or publications</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Responsible AI Use -->
+            <div class="question-group">
+                <h2>4. Responsible AI Use</h2>
+                <p><em>These questions assess awareness and application of AI responsible use principles</em></p>
+                
+                <div class="question">
+                    <p>Q4.1: How would you rate your knowledge of responsible AI use?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q10-1" name="q10" value="1" required>
+                            <label for="q10-1">1. I have limited awareness of responsible use issues</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q10-2" name="q10" value="2">
+                            <label for="q10-2">2. I recognize some responsible use considerations like privacy</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q10-3" name="q10" value="3">
+                            <label for="q10-3">3. I understand multiple responsible use dimensions</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q10-4" name="q10" value="4">
+                            <label for="q10-4">4. I evaluate AI tools through a comprehensive responsible use framework</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q10-5" name="q10" value="5">
+                            <label for="q10-5">5. I help develop policies or guidelines for responsible AI use</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q4.2: How do you address privacy and data security when using AI tools?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q11-1" name="q11" value="1" required>
+                            <label for="q11-1">1. I haven't considered these issues in depth</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q11-2" name="q11" value="2">
+                            <label for="q11-2">2. I follow basic guidelines provided by my institution</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q11-3" name="q11" value="3">
+                            <label for="q11-3">3. I actively evaluate the privacy implications of AI tools I use</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q11-4" name="q11" value="4">
+                            <label for="q11-4">4. I implement protocols to ensure data privacy with AI tools</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q11-5" name="q11" value="5">
+                            <label for="q11-5">5. I develop or contribute to institutional policies on AI privacy and security</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q4.3: How do you address biases, digital equity, and digital accessibility when implementing AI tools?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q12-1" name="q12" value="1" required>
+                            <label for="q12-1">1. I have limited awareness of AI biases and accessibility issues</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q12-2" name="q12" value="2">
+                            <label for="q12-2">2. I recognize that AI tools may contain biases and present barriers for some learners</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q12-3" name="q12" value="3">
+                            <label for="q12-3">3. I evaluate AI tools for potential biases and accessibility features before implementation</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q12-4" name="q12" value="4">
+                            <label for="q12-4">4. I actively adapt AI implementation to mitigate biases and ensure all students can benefit regardless of their abilities or circumstances</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q12-5" name="q12" value="5">
+                            <label for="q12-5">5. I develop approaches that use AI to identify and address biases while enhancing accessibility and closing digital equity gaps</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Leadership and Collaboration -->
+            <div class="question-group">
+                <h2>5. AI Leadership and Collaboration</h2>
+                <p><em>These questions assess how you influence others in AI adoption</em></p>
+                
+                <div class="question">
+                    <p>Q5.1: How often do you collaborate with colleagues on AI implementation?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q13-1" name="q13" value="1" required>
+                            <label for="q13-1">1. Rarely or never</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q13-2" name="q13" value="2">
+                            <label for="q13-2">2. Occasionally discuss AI tools with colleagues</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q13-3" name="q13" value="3">
+                            <label for="q13-3">3. Regularly share AI practices with department members</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q13-4" name="q13" value="4">
+                            <label for="q13-4">4. Lead collaborative projects involving AI tools</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q13-5" name="q13" value="5">
+                            <label for="q13-5">5. Facilitate department-wide or organization-wide AI initiatives</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q5.2: How do you contribute to others' AI knowledge and skills?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q14-1" name="q14" value="1" required>
+                            <label for="q14-1">1. I don't typically share AI knowledge with others</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q14-2" name="q14" value="2">
+                            <label for="q
