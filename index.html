@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+            let currentScores = null;
+            let currentPersona = null;
+            let currentRecommendations = null;<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -132,11 +134,134 @@
             color: var(--primary-color);
         }
         
-        .radar-chart-container {
+        .sliders-container {
+            padding: 20px 0;
+        }
+        
+        .slider-item {
+            margin-bottom: 25px;
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .slider-title {
+            font-weight: bold;
+            color: var(--dark-color);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        
+        .slider-score {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .slider-track {
+            position: relative;
+            height: 12px;
+            background-color: #e0e0e0;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        
+        .slider-fill {
+            position: absolute;
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 6px;
+        }
+        
+        .slider-markers {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+        }
+        
+        .slider-marker {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 20%;
+            text-align: center;
+            position: relative;
+        }
+        
+        .marker-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin-bottom: 5px;
+        }
+        
+        .marker-dot.active {
+            background-color: var(--primary-color);
+            width: 12px;
+            height: 12px;
+        }
+        
+        .marker-label {
+            font-size: 0.8rem;
+            color: var(--dark-color);
+        }
+        
+        .slider-current-position {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background-color: var(--primary-color);
+            border: 2px solid white;
+            border-radius: 50%;
+            top: -3px;
+            transform: translateX(-50%);
+            z-index: 2;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .slider-descriptions {
+            display: none;
+            margin-top: 10px;
+            background-color: white;
+            border-radius: 6px;
+            padding: 12px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .slider-description {
+            display: none;
+            font-size: 0.9rem;
+        }
+        
+        .slider-item:hover .slider-descriptions {
+            display: block;
+        }
+        
+        .slider-persona-indicator {
+            position: absolute;
             width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
+            top: -8px;
+            border-top: 2px dashed #f39c12;
+            z-index: 1;
+        }
+        
+        .persona-indicator-label {
+            position: absolute;
+            top: -25px;
+            right: 0;
+            background-color: #f39c12;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 3px;
         }
         
         .recommendations {
@@ -727,8 +852,8 @@
         </div>
         
         <h3>Competency Area Scores</h3>
-        <div class="radar-chart-container">
-            <canvas id="radar-chart"></canvas>
+        <div id="sliders-container" class="sliders-container">
+            <!-- Sliders will be generated here by JavaScript -->
         </div>
         
         <div class="recommendations">
@@ -760,11 +885,7 @@
             const personaDescription = document.getElementById('persona-description');
             const recommendationsList = document.getElementById('recommendations-list');
             const exportPdfBtn = document.getElementById('export-pdf');
-            let radarChart = null;
-            let currentScores = null;
-            let currentPersona = null;
-            let currentRecommendations = null;
-            
+            // Delete radar chart creation function since we're not using it anymore
             // Define the persona levels
             const personas = [
                 {
