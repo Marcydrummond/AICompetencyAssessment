@@ -973,26 +973,53 @@
             
             // Function to calculate scores
             function calculateScores() {
+                console.log("Calculating scores...");
                 const formData = new FormData(form);
+                
+                // Debug: Check form data
+                for (let [key, value] of formData.entries()) {
+                    console.log(`${key}: ${value}`);
+                }
+                
+                // Define competency clusters
+                const competencyClusters = [
+                    { id: "technical", name: "Technical AI Skills", questions: [1, 2, 3] },
+                    { id: "implementation", name: "AI Implementation", questions: [4, 5, 6] },
+                    { id: "literacy", name: "AI Literacy", questions: [7, 8, 9] },
+                    { id: "ethics", name: "Ethical AI Use", questions: [10, 11, 12] },
+                    { id: "leadership", name: "AI Leadership", questions: [13, 14, 15] },
+                    { id: "personalization", name: "AI Personalization", questions: [16, 17, 18] }
+                ];
                 
                 // Calculate cluster scores
                 const clusterScores = competencyClusters.map(cluster => {
                     let total = 0;
+                    let count = 0;
                     
                     cluster.questions.forEach(q => {
-                        total += parseInt(formData.get('q' + q)) || 0;
+                        const value = parseInt(formData.get(`q${q}`)) || 0;
+                        console.log(`Question ${q} value: ${value}`);
+                        if (value > 0) {
+                            total += value;
+                            count++;
+                        }
                     });
+                    
+                    // Ensure we don't divide by zero
+                    const score = count > 0 ? total / count : 0;
+                    console.log(`${cluster.name} score: ${score}`);
                     
                     return {
                         id: cluster.id,
                         name: cluster.name,
-                        score: total / cluster.questions.length
+                        score: score
                     };
                 });
                 
                 // Calculate overall score
                 const totalScore = clusterScores.reduce((sum, cluster) => sum + cluster.score, 0);
-                const overallScore = totalScore / clusterScores.length;
+                const overallScore = clusterScores.length > 0 ? totalScore / clusterScores.length : 0;
+                console.log(`Overall score: ${overallScore}`);
                 
                 return {
                     overall: overallScore,
