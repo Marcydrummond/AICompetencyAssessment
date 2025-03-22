@@ -1,6 +1,724 @@
+                    }
+                    
+                    // Competency cluster heading
+                    doc.setFontSize(13);
+                    doc.setTextColor(52, 152, 219);
+                    doc.text(`${cluster.name}`, margin, yPos);
+                    yPos += 7;
+                    
+                    // For each question in the cluster
+                    cluster.questions.forEach((questionNumber) => {
+                        // Get the question text from our defined texts
+                        const questionText = questionTexts[questionNumber];
+                        
+                        // Get selected answer value (1-5)
+                        const selectedValue = formData.get(`q${questionNumber}`);
+                        
+                        // Get the label text for the selected option
+                        let selectedLabel = "No response";
+                        if (selectedValue) {
+                            const selectedOption = document.querySelector(`input[name="q${questionNumber}"][value="${selectedValue}"]`);
+                            if (selectedOption && selectedOption.nextElementSibling) {
+                                selectedLabel = selectedOption.nextElementSibling.textContent;
+                            }
+                        }
+                        
+                        // Check if we need a new page
+                        if (yPos > doc.internal.pageSize.getHeight() - 30) {
+                            doc.addPage();
+                            yPos = 20;
+                        }
+                        
+                        // Add question
+                        doc.setFontSize(10);
+                        doc.setTextColor(0, 0, 0);
+                        const questionSplit = doc.splitTextToSize(questionText, width - 2*margin - 10);
+                        doc.text(questionSplit, margin + 5, yPos);
+                        yPos += questionSplit.length * 5 + 5;
+                        
+                        // Add response
+                        doc.setFontSize(10);
+                        doc.setTextColor(44, 62, 80);
+                        const responseSplit = doc.splitTextToSize(`Response: ${selectedLabel}`, width - 2*margin - 15);
+                        doc.text(responseSplit, margin + 10, yPos);
+                        yPos += responseSplit.length * 5 + 10;
+                    });
+                });
+                
+                // Add a page break before the recommendations
+                doc.addPage();
+                yPos = 20;
+                
+                // Add recommendations
+                doc.setFontSize(14);
+                doc.text('Recommendations for Growth', margin, yPos);
+                yPos += 8;
+                
+                doc.setFontSize(12);
+                currentRecommendations.forEach(rec => {
+                    const text = `${rec.cluster}: ${rec.recommendation}`;
+                    const splitRec = doc.splitTextToSize(text, width - 2*margin);
+                    
+                    // Check if we need a new page
+                    if (yPos + splitRec.length * 6 > doc.internal.pageSize.getHeight() - margin) {
+                        doc.addPage();
+                        yPos = 20;
+                    }
+                    
+                    doc.text(splitRec, margin, yPos);
+                    yPos += splitRec.length * 6 + 5;
+                });
+                
+                // Add date and time at the bottom of the last page
+                const now = new Date();
+                doc.setFontSize(10);
+                doc.setTextColor(100, 100, 100);
+                doc.text(`Report generated: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`, 
+                         width - margin, doc.internal.pageSize.getHeight() - 10, { align: 'right' });
+                
+                // Save the PDF
+                doc.save('AI_Competency_Assessment_Report.pdf');
+            });
+        });
+    </script>
+</body>
+</html>                        <div class="option">
+                            <input type="radio" id="q14-1" name="q14" value="1" required>
+                            <label for="q14-1">1. I don't typically share AI knowledge with others</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q14-2" name="q14" value="2">
+                            <label for="q14-2">2. I informally share experiences with AI tools</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q14-3" name="q14" value="3">
+                            <label for="q14-3">3. I guide colleagues in effective AI tool use</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q14-4" name="q14" value="4">
+                            <label for="q14-4">4. I develop resources or conduct workshops on AI use</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q14-5" name="q14" value="5">
+                            <label for="q14-5">5. I mentor others in strategic AI implementation</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q5.3: What role do you play in shaping AI policies or practices in your role/institution?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q15-1" name="q15" value="1" required>
+                            <label for="q15-1">1. No significant role in policy or practice development</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q15-2" name="q15" value="2">
+                            <label for="q15-2">2. I offer input when asked about AI tools</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q15-3" name="q15" value="3">
+                            <label for="q15-3">3. I actively contribute to discussions about AI practices</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q15-4" name="q15" value="4">
+                            <label for="q15-4">4. I help develop guidelines for AI implementation</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q15-5" name="q15" value="5">
+                            <label for="q15-5">5. I lead the development of AI strategies and policies</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Personalization and Adaptation with AI -->
+            <div class="question-group">
+                <h2>6. Personalization and Adaptation with AI</h2>
+                <p><em>These questions assess how you use AI for personalized learning</em></p>
+                
+                <div class="question">
+                    <p>Q6.1: How do you use AI to personalize educational experiences?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q16-1" name="q16" value="1" required>
+                            <label for="q16-1">1. I have limited experience with personalization through AI</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q16-2" name="q16" value="2">
+                            <label for="q16-2">2. I experiment with AI features that offer basic personalization</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q16-3" name="q16" value="3">
+                            <label for="q16-3">3. I regularly implement AI tools to provide differentiated experiences</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q16-4" name="q16" value="4">
+                            <label for="q16-4">4. I design comprehensive personalized learning experiences using AI</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q16-5" name="q16" value="5">
+                            <label for="q16-5">5. I develop or evaluate personalized AI systems for educational contexts</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q6.2: How do you adapt your practice based on insights from AI tools?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q17-1" name="q17" value="1" required>
+                            <label for="q17-1">1. I make few adaptations based on AI</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q17-2" name="q17" value="2">
+                            <label for="q17-2">2. I occasionally adjust activities based on AI feedback</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q17-3" name="q17" value="3">
+                            <label for="q17-3">3. I regularly modify approaches based on AI-generated insights</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q17-4" name="q17" value="4">
+                            <label for="q17-4">4. I systematically use AI analytics to inform practice changes</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q17-5" name="q17" value="5">
+                            <label for="q17-5">5. I implement data-driven improvement cycles using AI analytics</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <p>Q6.3: How do you measure the impact of AI implementation on outcomes?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q18-1" name="q18" value="1" required>
+                            <label for="q18-1">1. I don't formally measure AI impact</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q18-2" name="q18" value="2">
+                            <label for="q18-2">2. I collect anecdotal feedback about AI tool use</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q18-3" name="q18" value="3">
+                            <label for="q18-3">3. I use basic metrics to evaluate AI effectiveness</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q18-4" name="q18" value="4">
+                            <label for="q18-4">4. I implement systematic evaluation of AI impact</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q18-5" name="q18" value="5">
+                            <label for="q18-5">5. I design research or evaluation frameworks to assess AI implementation</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" id="submit-btn">Calculate My AI Competency Profile</button>
+        </form>
+    </div>
+    
+    <div id="results">
+        <h2>Your AI Competency Profile</h2>
+        
+        <div class="persona-level">
+            <h3 id="persona-title">Your AI Educator Persona</h3>
+            <div id="persona-description" class="persona-description"></div>
+        </div>
+        
+        <div class="score-card">
+            <div>
+                <div class="score-value" id="overall-score">0</div>
+                <h3>Overall Score</h3>
+                <p>Based on all competency areas</p>
+            </div>
+        </div>
+        
+        <h3>Competency Area Scores</h3>
+        <div id="sliders-container" class="sliders-container">
+            <!-- Sliders will be generated here by JavaScript -->
+        </div>
+        
+        <div class="recommendations">
+            <h3>Recommendations for Growth</h3>
+            <div id="recommendations-list"></div>
+        </div>
+        
+        <div class="export-options">
+            <h3>Export Results</h3>
+            <div class="export-buttons">
+                <button id="export-pdf" class="export-btn">Download Complete Report (PDF)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Chart.js for the radar chart -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <!-- Include jsPDF for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Include html2canvas for chart capture -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('assessment-form');
+            const results = document.getElementById('results');
+            const overallScoreElement = document.getElementById('overall-score');
+            const personaTitle = document.getElementById('persona-title');
+            const personaDescription = document.getElementById('persona-description');
+            const recommendationsList = document.getElementById('recommendations-list');
+            const exportPdfBtn = document.getElementById('export-pdf');
+            
+            // Store current results
             let currentScores = null;
             let currentPersona = null;
-            let currentRecommendations = null;<!DOCTYPE html>
+            let currentRecommendations = null;
+            
+            // Define the persona levels
+            const personas = [
+                {
+                    level: 1,
+                    name: "Incidental User",
+                    description: "You are aware of AI's existence and occasionally use basic AI tools. You have a general understanding of AI capabilities but may be apprehensive about its role in education. To advance, focus on exploring AI tools specifically designed for educational contexts."
+                },
+                {
+                    level: 2,
+                    name: "Active Explorer",
+                    description: "You actively discover and experiment with AI-powered educational resources. You've gained proficiency in a limited number of AI applications relevant to education and are enhancing your ability to interpret AI outputs. Focus on systematic integration of these tools into your regular practice."
+                },
+                {
+                    level: 3,
+                    name: "Informed Integrator",
+                    description: "You regularly combine multiple AI tools in your practices, adapting your approach to include AI-enhanced content and activities. You effectively guide others in responsible AI use. Consider developing more advanced customization skills and thought leadership in your area."
+                },
+                {
+                    level: 4,
+                    name: "Creative Adapter",
+                    description: "You implement and customize AI tools at an advanced level, designing educational experiences that incorporate AI meaningfully. You're becoming a thought leader who mentors others in AI adoption. Focus on strategic institutional implementation and measuring impact."
+                },
+                {
+                    level: 5,
+                    name: "Value Creator",
+                    description: "You're engaged in developing new AI-powered educational tools or applications. You implement AI strategically at the institutional level, measure its impact, and contribute to research on AI in education. Continue leading innovation and policy development."
+                }
+            ];
+            
+            // Define competency clusters
+            const competencyClusters = [
+                { id: "technical", name: "Technical AI Skills", questions: [1, 2, 3] },
+                { id: "implementation", name: "AI Implementation", questions: [4, 5, 6] },
+                { id: "literacy", name: "AI Literacy", questions: [7, 8, 9] },
+                { id: "ethics", name: "Ethical AI Use", questions: [10, 11, 12] },
+                { id: "leadership", name: "AI Leadership", questions: [13, 14, 15] },
+                { id: "personalization", name: "AI Personalization", questions: [16, 17, 18] }
+            ];
+            
+            // Recommendations based on competency level
+            const recommendations = {
+                technical: [
+                    "Start exploring beginner-friendly AI tools like ChatGPT or Microsoft Copilot for basic tasks.",
+                    "Experiment with different generative AI tools and compare their outputs for various professional tasks.",
+                    "Practice creating effective prompts for generative AI tools and implement them in multiple contexts.",
+                    "Learn about API integration or advanced prompting techniques to customize AI outputs.",
+                    "Share your technical expertise through workshops or publications."
+                ],
+                implementation: [
+                    "Identify one work activity where AI could enhance efficiency or outcomes.",
+                    "Plan the systematic integration of AI tools across several professional activities.",
+                    "Redesign workflows to meaningfully incorporate AI tools.",
+                    "Create comprehensive AI-enhanced processes and evaluate their effectiveness.",
+                    "Develop strategic frameworks for AI integration across your department or institution."
+                ],
+                literacy: [
+                    "Take an introductory course on AI concepts and terminology.",
+                    "Join online communities focused on AI in education.",
+                    "Follow research on AI applications and limitations in educational settings.",
+                    "Participate in advanced professional development on AI systems.",
+                    "Contribute to knowledge through research, publications, or presentations."
+                ],
+                ethics: [
+                    "Learn about basic ethical considerations in AI use, particularly privacy concerns.",
+                    "Explore resources on AI biases and digital equity issues.",
+                    "Develop protocols for evaluating AI tools through an ethical lens before implementation.",
+                    "Create guidelines for responsible AI use in your context.",
+                    "Lead institutional policy development around ethical AI implementation."
+                ],
+                leadership: [
+                    "Start sharing your AI experiences with interested colleagues.",
+                    "Organize informal discussions about AI tools with department members.",
+                    "Lead a small working group on AI implementation.",
+                    "Develop resources or workshops on AI use for colleagues.",
+                    "Establish institution-wide AI initiatives and mentorship programs."
+                ],
+                personalization: [
+                    "Identify how AI might help personalize or customize work processes.",
+                    "Experiment with AI features that provide differentiated support for various stakeholders.",
+                    "Implement AI tools that adapt to user needs or preferences.",
+                    "Design comprehensive personalized workflows using AI.",
+                    "Develop frameworks for measuring AI's impact on personalization and efficiency outcomes."
+                ]
+            };
+            
+            // Function to calculate scores
+            function calculateScores() {
+                const formData = new FormData(form);
+                
+                // Calculate cluster scores
+                const clusterScores = competencyClusters.map(cluster => {
+                    let total = 0;
+                    
+                    cluster.questions.forEach(q => {
+                        total += parseInt(formData.get('q' + q)) || 0;
+                    });
+                    
+                    return {
+                        id: cluster.id,
+                        name: cluster.name,
+                        score: total / cluster.questions.length
+                    };
+                });
+                
+                // Calculate overall score
+                const totalScore = clusterScores.reduce((sum, cluster) => sum + cluster.score, 0);
+                const overallScore = totalScore / clusterScores.length;
+                
+                return {
+                    overall: overallScore,
+                    clusters: clusterScores
+                };
+            }
+            
+            // Function to determine persona level
+            function determinePersona(score) {
+                const level = Math.round(score);
+                return personas.find(p => p.level === level) || personas[0];
+            }
+            
+            // Function to get recommendations
+            function getRecommendations(clusterScores) {
+                return clusterScores.map(cluster => {
+                    const level = Math.min(Math.floor(cluster.score), 4); // 0-4 index
+                    return {
+                        cluster: cluster.name,
+                        recommendation: recommendations[cluster.id][level]
+                    };
+                });
+            }
+            
+            // Form submission handler
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const scores = calculateScores();
+                currentScores = scores;
+                const persona = determinePersona(scores.overall);
+                currentPersona = persona;
+                const userRecommendations = getRecommendations(scores.clusters);
+                currentRecommendations = userRecommendations;
+                
+                // Update the results UI
+                overallScoreElement.textContent = scores.overall.toFixed(1);
+                personaTitle.textContent = persona.name;
+                personaDescription.textContent = persona.description;
+                
+                // Create recommendations list
+                recommendationsList.innerHTML = '';
+                userRecommendations.forEach(rec => {
+                    const recItem = document.createElement('div');
+                    recItem.className = 'recommendation-item';
+                    recItem.innerHTML = `<strong>${rec.cluster}:</strong> ${rec.recommendation}`;
+                    recommendationsList.appendChild(recItem);
+                });
+                
+                // Create sliders
+                createSliders(scores.clusters, persona.level);
+                
+                // Show results
+                results.style.display = 'block';
+                
+                // Scroll to results
+                results.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Function to create sliders
+            function createSliders(clusterScores, personaLevel) {
+                const slidersContainer = document.getElementById('sliders-container');
+                slidersContainer.innerHTML = '';
+                
+                // Define level descriptions for each competency area
+                const levelDescriptions = {
+                    technical: [
+                        "You have minimal experience with AI tools and limited ability to evaluate their outputs.",
+                        "You can use basic AI tools for simple tasks and recognize common issues in AI outputs.",
+                        "You use AI tools regularly for multiple purposes and can effectively review outputs before use.",
+                        "You can customize AI using advanced prompting and identify patterns to improve outputs.",
+                        "You can integrate AI into workflows, develop custom implementations, and systematically evaluate outputs."
+                    ],
+                    implementation: [
+                        "You rarely use AI tools in your work or make minimal adaptations to accommodate them.",
+                        "You occasionally use AI for specific tasks and modify existing materials to incorporate them.",
+                        "You systematically integrate multiple AI tools into your practice and redesign activities for AI integration.",
+                        "You extensively incorporate AI into your work and create experiences that leverage AI capabilities.",
+                        "You lead AI integration initiatives and develop strategic implementation frameworks at an institutional level."
+                    ],
+                    literacy: [
+                        "You understand basic AI terms but have limited awareness of AI capabilities and limitations.",
+                        "You can explain fundamental AI concepts and recognize that AI has limitations and biases.",
+                        "You understand different types of AI applications and can identify specific limitations in AI systems.",
+                        "You have in-depth knowledge of AI systems and evaluate tools based on their underlying limitations.",
+                        "You can explain complex AI concepts and conduct systematic analyses of AI biases and limitations."
+                    ],
+                    ethics: [
+                        "You have limited awareness of ethical issues, privacy concerns, and accessibility issues in AI use.",
+                        "You recognize some ethical considerations and that AI may contain biases or present barriers.",
+                        "You understand multiple ethical dimensions and evaluate tools for biases before implementation.",
+                        "You evaluate tools through an ethical framework and adapt implementation to mitigate biases.",
+                        "You help develop policies for ethical AI use and approaches that address biases while enhancing accessibility."
+                    ],
+                    leadership: [
+                        "You rarely collaborate with colleagues on AI and don't typically share AI knowledge with others.",
+                        "You occasionally discuss AI tools with colleagues and informally share experiences.",
+                        "You regularly share AI practices and guide colleagues in effective AI tool use.",
+                        "You lead collaborative AI projects and develop resources or conduct workshops on AI use.",
+                        "You facilitate organization-wide AI initiatives and mentor others in strategic AI implementation."
+                    ],
+                    personalization: [
+                        "You have limited experience with AI personalization and don't formally measure AI impact.",
+                        "You experiment with basic personalization features and collect anecdotal feedback on AI use.",
+                        "You regularly implement AI for differentiated experiences and use basic metrics to evaluate effectiveness.",
+                        "You design comprehensive personalized experiences and systematically evaluate AI impact.",
+                        "You develop personalized AI systems and frameworks for measuring AI's impact on outcomes."
+                    ]
+                };
+                
+                // Create a slider for each competency cluster
+                clusterScores.forEach(cluster => {
+                    const sliderItem = document.createElement('div');
+                    sliderItem.className = 'slider-item';
+                    
+                    // Create slider header with title and score
+                    const sliderHeader = document.createElement('div');
+                    sliderHeader.className = 'slider-header';
+                    
+                    const sliderTitle = document.createElement('h4');
+                    sliderTitle.className = 'slider-title';
+                    sliderTitle.textContent = cluster.name;
+                    
+                    const sliderScore = document.createElement('div');
+                    sliderScore.className = 'slider-score';
+                    sliderScore.textContent = cluster.score.toFixed(1);
+                    
+                    sliderHeader.appendChild(sliderTitle);
+                    sliderHeader.appendChild(sliderScore);
+                    
+                    // Create slider track
+                    const sliderTrack = document.createElement('div');
+                    sliderTrack.className = 'slider-track';
+                    
+                    // Add persona level indicator line
+                    const personaIndicator = document.createElement('div');
+                    personaIndicator.className = 'slider-persona-indicator';
+                    personaIndicator.style.width = `${personaLevel * 20}%`;
+                    
+                    const personaIndicatorLabel = document.createElement('div');
+                    personaIndicatorLabel.className = 'persona-indicator-label';
+                    personaIndicatorLabel.textContent = `${currentPersona.name} Level`;
+                    
+                    personaIndicator.appendChild(personaIndicatorLabel);
+                    sliderTrack.appendChild(personaIndicator);
+                    
+                    // Create slider fill (colored part)
+                    const sliderFill = document.createElement('div');
+                    sliderFill.className = 'slider-fill';
+                    sliderFill.style.width = `${cluster.score * 20}%`; // 20% for each level out of 5
+                    
+                    // Create current position marker
+                    const sliderPosition = document.createElement('div');
+                    sliderPosition.className = 'slider-current-position';
+                    sliderPosition.style.left = `${cluster.score * 20}%`;
+                    
+                    sliderTrack.appendChild(sliderFill);
+                    sliderTrack.appendChild(sliderPosition);
+                    
+                    // Create markers for each level
+                    const sliderMarkers = document.createElement('div');
+                    sliderMarkers.className = 'slider-markers';
+                    
+                    for (let i = 1; i <= 5; i++) {
+                        const marker = document.createElement('div');
+                        marker.className = 'slider-marker';
+                        
+                        const markerDot = document.createElement('div');
+                        markerDot.className = 'marker-dot' + (i <= Math.round(cluster.score) ? ' active' : '');
+                        
+                        const markerLabel = document.createElement('div');
+                        markerLabel.className = 'marker-label';
+                        markerLabel.textContent = i.toString();
+                        
+                        marker.appendChild(markerDot);
+                        marker.appendChild(markerLabel);
+                        sliderMarkers.appendChild(marker);
+                        
+                        // Add hover functionality to show description
+                        marker.addEventListener('mouseenter', function() {
+                            document.querySelectorAll('.slider-description').forEach(desc => {
+                                desc.style.display = 'none';
+                            });
+                            const description = document.getElementById(`${cluster.id}-level-${i}`);
+                            if (description) {
+                                description.style.display = 'block';
+                            }
+                        });
+                    }
+                    
+                    // Create level descriptions (hidden by default, shown on hover)
+                    const descriptionsContainer = document.createElement('div');
+                    descriptionsContainer.className = 'slider-descriptions';
+                    
+                    for (let i = 1; i <= 5; i++) {
+                        const description = document.createElement('div');
+                        description.className = 'slider-description';
+                        description.id = `${cluster.id}-level-${i}`;
+                        description.textContent = levelDescriptions[cluster.id][i-1];
+                        descriptionsContainer.appendChild(description);
+                    }
+                    
+                    // Add all elements to slider item
+                    sliderItem.appendChild(sliderHeader);
+                    sliderItem.appendChild(sliderTrack);
+                    sliderItem.appendChild(sliderMarkers);
+                    sliderItem.appendChild(descriptionsContainer);
+                    
+                    // Add slider to container
+                    slidersContainer.appendChild(sliderItem);
+                });
+            }
+            
+            // Export PDF function
+            exportPdfBtn.addEventListener('click', function() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('p', 'mm', 'a4');
+                const width = doc.internal.pageSize.getWidth();
+                const margin = 20;
+                let yPos = 20;
+                
+                // Title
+                doc.setFontSize(20);
+                doc.setTextColor(52, 152, 219);
+                doc.text('Educator AI Competency Assessment Report', width/2, yPos, { align: 'center' });
+                yPos += 15;
+                
+                // Persona
+                doc.setFontSize(16);
+                doc.setTextColor(52, 152, 219);
+                doc.text(`AI Educator Persona: ${currentPersona.name}`, width/2, yPos, { align: 'center' });
+                yPos += 10;
+                
+                // Overall Score
+                doc.setFontSize(14);
+                doc.setTextColor(0, 0, 0);
+                doc.text(`Overall Score: ${currentScores.overall.toFixed(1)}`, margin, yPos);
+                yPos += 10;
+                
+                // Persona Description
+                doc.setFontSize(12);
+                const splitDesc = doc.splitTextToSize(currentPersona.description, width - 2*margin);
+                doc.text(splitDesc, margin, yPos);
+                yPos += splitDesc.length * 7;
+                
+                // Add competency scores section
+                yPos += 10;
+                doc.setFontSize(14);
+                doc.text('Competency Area Scores', margin, yPos);
+                yPos += 8;
+                
+                // Add bar chart representation of scores
+                doc.setFontSize(12);
+                currentScores.clusters.forEach(cluster => {
+                    // Check if we need a new page
+                    if (yPos > doc.internal.pageSize.getHeight() - 30) {
+                        doc.addPage();
+                        yPos = 20;
+                    }
+                    
+                    // Draw competency name
+                    doc.setTextColor(0, 0, 0);
+                    doc.text(`${cluster.name}:`, margin, yPos);
+                    
+                    // Draw score
+                    doc.setTextColor(52, 152, 219);
+                    doc.text(`${cluster.score.toFixed(1)}`, width - margin, yPos, { align: 'right' });
+                    
+                    yPos += 6;
+                    
+                    // Draw bar background
+                    const barWidth = width - 2 * margin;
+                    const barHeight = 8;
+                    doc.setFillColor(230, 230, 230);
+                    doc.rect(margin, yPos, barWidth, barHeight, 'F');
+                    
+                    // Draw filled portion of bar
+                    const fillWidth = (cluster.score / 5) * barWidth;
+                    doc.setFillColor(52, 152, 219);
+                    doc.rect(margin, yPos, fillWidth, barHeight, 'F');
+                    
+                    // Draw level markers
+                    doc.setDrawColor(255, 255, 255);
+                    for (let i = 1; i < 5; i++) {
+                        const markerPos = margin + (i / 5) * barWidth;
+                        doc.line(markerPos, yPos, markerPos, yPos + barHeight);
+                    }
+                    
+                    // Draw level numbers
+                    doc.setFontSize(8);
+                    doc.setTextColor(100, 100, 100);
+                    for (let i = 1; i <= 5; i++) {
+                        const markerPos = margin + ((i - 0.5) / 5) * barWidth;
+                        doc.text(i.toString(), markerPos, yPos + barHeight + 5, { align: 'center' });
+                    }
+                    
+                    yPos += barHeight + 15;
+                });
+                
+                // Add responses to assessment questions
+                yPos += 10;
+                doc.setFontSize(14);
+                doc.text('Assessment Responses', margin, yPos);
+                yPos += 8;
+                
+                // Define all question texts
+                const questionTexts = {
+                    1: "Q1.1: How would you rate your familiarity with using generative AI tools (like ChatGPT, Claude, Perplexity, Gemini, Microsoft Copilot) in educational settings?",
+                    2: "Q1.2: How do you interact with AI features embedded in educational technologies your institution uses?",
+                    3: "Q1.3: How comfortable are you with evaluating and improving the quality of AI-generated content?",
+                    4: "Q2.1: How frequently do you integrate AI tools into your educational practice?",
+                    5: "Q2.2: Which statement best describes how you implement AI in educational contexts?",
+                    6: "Q2.3: How do you approach curriculum or content design in relation to AI?",
+                    7: "Q3.1: How would you rate your understanding of AI concepts and terminology?",
+                    8: "Q3.2: How well do you understand AI's limitations and potential biases?",
+                    9: "Q3.3: How do you stay informed about developments in AI for education?",
+                    10: "Q4.1: How would you rate your knowledge of ethical considerations in educational AI use?",
+                    11: "Q4.2: How do you address privacy and data security when using AI tools?",
+                    12: "Q4.3: How do you address biases, digital equity, and accessibility when implementing AI tools?",
+                    13: "Q5.1: How often do you collaborate with colleagues on AI implementation?",
+                    14: "Q5.2: How do you contribute to others' AI knowledge and skills?",
+                    15: "Q5.3: What role do you play in shaping AI policies or practices in your role/institution?",
+                    16: "Q6.1: How do you use AI to personalize educational experiences?",
+                    17: "Q6.2: How do you adapt your practice based on insights from AI tools?",
+                    18: "Q6.3: How do you measure the impact of AI implementation on outcomes?"
+                };
+                
+                // Get all form data
+                const formData = new FormData(form);
+                
+                // For each competency cluster
+                competencyClusters.forEach((cluster, clusterIndex) => {
+                    // Check if we need a new page
+                    if (yPos > doc.internal.pageSize.getHeight() - 40) {
+                        doc.addPage();
+                        yPos = 20;<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -700,606 +1418,4 @@
                         <div class="option">
                             <input type="radio" id="q14-1" name="q14" value="1" required>
                             <label for="q14-1">1. I don't typically share AI knowledge with others</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q14-2" name="q14" value="2">
-                            <label for="q14-2">2. I informally share experiences with AI tools</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q14-3" name="q14" value="3">
-                            <label for="q14-3">3. I guide colleagues in effective AI tool use</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q14-4" name="q14" value="4">
-                            <label for="q14-4">4. I develop resources or conduct workshops on AI use</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q14-5" name="q14" value="5">
-                            <label for="q14-5">5. I mentor others in strategic AI implementation</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="question">
-                    <p>Q5.3: What role do you play in shaping AI policies or practices in your role/institution?</p>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" id="q15-1" name="q15" value="1" required>
-                            <label for="q15-1">1. No significant role in policy or practice development</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q15-2" name="q15" value="2">
-                            <label for="q15-2">2. I offer input when asked about AI tools</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q15-3" name="q15" value="3">
-                            <label for="q15-3">3. I actively contribute to discussions about AI practices</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q15-4" name="q15" value="4">
-                            <label for="q15-4">4. I help develop guidelines for AI implementation</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q15-5" name="q15" value="5">
-                            <label for="q15-5">5. I lead the development of AI strategies and policies</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Personalization and Adaptation with AI -->
-            <div class="question-group">
-                <h2>6. Personalization and Adaptation with AI</h2>
-                <p><em>These questions assess how you use AI for personalized learning</em></p>
-                
-                <div class="question">
-                    <p>Q6.1: How do you use AI to personalize educational experiences?</p>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" id="q16-1" name="q16" value="1" required>
-                            <label for="q16-1">1. I have limited experience with personalization through AI</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q16-2" name="q16" value="2">
-                            <label for="q16-2">2. I experiment with AI features that offer basic personalization</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q16-3" name="q16" value="3">
-                            <label for="q16-3">3. I regularly implement AI tools to provide differentiated experiences</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q16-4" name="q16" value="4">
-                            <label for="q16-4">4. I design comprehensive personalized learning experiences using AI</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q16-5" name="q16" value="5">
-                            <label for="q16-5">5. I develop or evaluate personalized AI systems for educational contexts</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="question">
-                    <p>Q6.2: How do you adapt your practice based on insights from AI tools?</p>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" id="q17-1" name="q17" value="1" required>
-                            <label for="q17-1">1. I make few adaptations based on AI</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q17-2" name="q17" value="2">
-                            <label for="q17-2">2. I occasionally adjust activities based on AI feedback</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q17-3" name="q17" value="3">
-                            <label for="q17-3">3. I regularly modify approaches based on AI-generated insights</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q17-4" name="q17" value="4">
-                            <label for="q17-4">4. I systematically use AI analytics to inform practice changes</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q17-5" name="q17" value="5">
-                            <label for="q17-5">5. I implement data-driven improvement cycles using AI analytics</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="question">
-                    <p>Q6.3: How do you measure the impact of AI implementation on outcomes?</p>
-                    <div class="options">
-                        <div class="option">
-                            <input type="radio" id="q18-1" name="q18" value="1" required>
-                            <label for="q18-1">1. I don't formally measure AI impact</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q18-2" name="q18" value="2">
-                            <label for="q18-2">2. I collect anecdotal feedback about AI tool use</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q18-3" name="q18" value="3">
-                            <label for="q18-3">3. I use basic metrics to evaluate AI effectiveness</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q18-4" name="q18" value="4">
-                            <label for="q18-4">4. I implement systematic evaluation of AI impact</label>
-                        </div>
-                        <div class="option">
-                            <input type="radio" id="q18-5" name="q18" value="5">
-                            <label for="q18-5">5. I design research or evaluation frameworks to assess AI implementation</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <button type="submit" id="submit-btn">Calculate My AI Competency Profile</button>
-        </form>
-    </div>
-    
-    <div id="results">
-        <h2>Your AI Competency Profile</h2>
-        
-        <div class="persona-level">
-            <h3 id="persona-title">Your AI Educator Persona</h3>
-            <div id="persona-description" class="persona-description"></div>
-        </div>
-        
-        <div class="score-card">
-            <div>
-                <div class="score-value" id="overall-score">0</div>
-                <h3>Overall Score</h3>
-                <p>Based on all competency areas</p>
-            </div>
-        </div>
-        
-        <h3>Competency Area Scores</h3>
-        <div id="sliders-container" class="sliders-container">
-            <!-- Sliders will be generated here by JavaScript -->
-        </div>
-        
-        <div class="recommendations">
-            <h3>Recommendations for Growth</h3>
-            <div id="recommendations-list"></div>
-        </div>
-        
-        <div class="export-options">
-            <h3>Export Results</h3>
-            <div class="export-buttons">
-                <button id="export-pdf" class="export-btn">Download Complete Report (PDF)</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Include Chart.js for the radar chart -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
-    <!-- Include jsPDF for PDF export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <!-- Include html2canvas for chart capture -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('assessment-form');
-            const results = document.getElementById('results');
-            const overallScoreElement = document.getElementById('overall-score');
-            const personaTitle = document.getElementById('persona-title');
-            const personaDescription = document.getElementById('persona-description');
-            const recommendationsList = document.getElementById('recommendations-list');
-            const exportPdfBtn = document.getElementById('export-pdf');
-            // Delete radar chart creation function since we're not using it anymore
-            // Define the persona levels
-            const personas = [
-                {
-                    level: 1,
-                    name: "Incidental User",
-                    description: "You are aware of AI's existence and occasionally use basic AI tools. You have a general understanding of AI capabilities but may be apprehensive about its role in education. To advance, focus on exploring AI tools specifically designed for educational contexts."
-                },
-                {
-                    level: 2,
-                    name: "Active Explorer",
-                    description: "You actively discover and experiment with AI-powered educational resources. You've gained proficiency in a limited number of AI applications relevant to education and are enhancing your ability to interpret AI outputs. Focus on systematic integration of these tools into your regular practice."
-                },
-                {
-                    level: 3,
-                    name: "Informed Integrator",
-                    description: "You regularly combine multiple AI tools in your practices, adapting your approach to include AI-enhanced content and activities. You effectively guide others in responsible AI use. Consider developing more advanced customization skills and thought leadership in your area."
-                },
-                {
-                    level: 4,
-                    name: "Creative Adapter",
-                    description: "You implement and customize AI tools at an advanced level, designing educational experiences that incorporate AI meaningfully. You're becoming a thought leader who mentors others in AI adoption. Focus on strategic institutional implementation and measuring impact."
-                },
-                {
-                    level: 5,
-                    name: "Value Creator",
-                    description: "You're engaged in developing new AI-powered educational tools or applications. You implement AI strategically at the institutional level, measure its impact, and contribute to research on AI in education. Continue leading innovation and policy development."
-                }
-            ];
-            
-            // Define competency clusters
-            const competencyClusters = [
-                { id: "technical", name: "Technical AI Skills", questions: [1, 2, 3] },
-                { id: "implementation", name: "AI Implementation", questions: [4, 5, 6] },
-                { id: "literacy", name: "AI Literacy", questions: [7, 8, 9] },
-                { id: "ethics", name: "Ethical AI Use", questions: [10, 11, 12] },
-                { id: "leadership", name: "AI Leadership", questions: [13, 14, 15] },
-                { id: "personalization", name: "AI Personalization", questions: [16, 17, 18] }
-            ];
-            
-            // Recommendations based on competency level
-            const recommendations = {
-                technical: [
-                    "Start exploring beginner-friendly AI tools like ChatGPT or Microsoft Copilot for basic tasks.",
-                    "Experiment with different generative AI tools and compare their outputs for educational tasks.",
-                    "Practice creating effective prompts for generative AI tools and implement them in multiple contexts.",
-                    "Learn about API integration or advanced prompting techniques to customize AI outputs.",
-                    "Share your technical expertise through workshops or publications."
-                ],
-                implementation: [
-                    "Identify one educational activity where AI could enhance the experience.",
-                    "Plan the systematic integration of AI tools across several educational activities.",
-                    "Redesign curriculum elements to meaningfully incorporate AI tools.",
-                    "Create comprehensive AI-enhanced learning experiences and evaluate their effectiveness.",
-                    "Develop strategic frameworks for AI integration across your institution."
-                ],
-                literacy: [
-                    "Take an introductory course on AI concepts and terminology.",
-                    "Join online communities focused on AI in education.",
-                    "Follow research on AI applications and limitations in educational settings.",
-                    "Participate in advanced professional development on AI systems.",
-                    "Contribute to knowledge through research, publications, or presentations."
-                ],
-                ethics: [
-                    "Learn about basic ethical considerations in AI use, particularly privacy concerns.",
-                    "Explore resources on AI biases and digital equity issues.",
-                    "Develop protocols for evaluating AI tools through an ethical lens before implementation.",
-                    "Create guidelines for responsible AI use in your context.",
-                    "Lead institutional policy development around ethical AI implementation."
-                ],
-                leadership: [
-                    "Start sharing your AI experiences with interested colleagues.",
-                    "Organize informal discussions about AI tools with department members.",
-                    "Lead a small working group on AI implementation.",
-                    "Develop resources or workshops on AI use for colleagues.",
-                    "Establish institution-wide AI initiatives and mentorship programs."
-                ],
-                personalization: [
-                    "Identify how AI might help personalize learning for different student needs.",
-                    "Experiment with AI features that provide differentiated support.",
-                    "Implement AI tools that adapt to learner progress or preferences.",
-                    "Design comprehensive personalized learning pathways using AI.",
-                    "Develop frameworks for measuring AI's impact on personalized learning outcomes."
-                ]
-            };
-            
-            // Function to calculate scores
-            function calculateScores() {
-                console.log("Calculating scores...");
-                const formData = new FormData(form);
-                
-                // Debug: Check form data
-                for (let [key, value] of formData.entries()) {
-                    console.log(`${key}: ${value}`);
-                }
-                
-                // Define competency clusters
-                const competencyClusters = [
-                    { id: "technical", name: "Technical AI Skills", questions: [1, 2, 3] },
-                    { id: "implementation", name: "AI Implementation", questions: [4, 5, 6] },
-                    { id: "literacy", name: "AI Literacy", questions: [7, 8, 9] },
-                    { id: "ethics", name: "Ethical AI Use", questions: [10, 11, 12] },
-                    { id: "leadership", name: "AI Leadership", questions: [13, 14, 15] },
-                    { id: "personalization", name: "AI Personalization", questions: [16, 17, 18] }
-                ];
-                
-                // Calculate cluster scores
-                const clusterScores = competencyClusters.map(cluster => {
-                    let total = 0;
-                    let count = 0;
-                    
-                    cluster.questions.forEach(q => {
-                        const value = parseInt(formData.get(`q${q}`)) || 0;
-                        console.log(`Question ${q} value: ${value}`);
-                        if (value > 0) {
-                            total += value;
-                            count++;
-                        }
-                    });
-                    
-                    // Ensure we don't divide by zero
-                    const score = count > 0 ? total / count : 0;
-                    console.log(`${cluster.name} score: ${score}`);
-                    
-                    return {
-                        id: cluster.id,
-                        name: cluster.name,
-                        score: score
-                    };
-                });
-                
-                // Calculate overall score
-                const totalScore = clusterScores.reduce((sum, cluster) => sum + cluster.score, 0);
-                const overallScore = clusterScores.length > 0 ? totalScore / clusterScores.length : 0;
-                console.log(`Overall score: ${overallScore}`);
-                
-                return {
-                    overall: overallScore,
-                    clusters: clusterScores
-                };
-            }
-            
-            // Function to determine persona level
-            function determinePersona(score) {
-                const level = Math.round(score);
-                return personas.find(p => p.level === level) || personas[0];
-            }
-            
-            // Function to get recommendations
-            function getRecommendations(clusterScores) {
-                return clusterScores.map(cluster => {
-                    const level = Math.min(Math.floor(cluster.score), 4); // 0-4 index
-                    return {
-                        cluster: cluster.name,
-                        recommendation: recommendations[cluster.id][level]
-                    };
-                });
-            }
-            
-            // Function to create radar chart
-            function createRadarChart(clusterScores) {
-                const ctx = document.getElementById('radar-chart').getContext('2d');
-                
-                if (radarChart) {
-                    radarChart.destroy();
-                }
-                
-                // Add grid lines that extend in all directions
-                const gridLines = {
-                    id: 'gridLines',
-                    beforeDraw: (chart) => {
-                        const ctx = chart.ctx;
-                        const xCenter = chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2;
-                        const yCenter = chart.chartArea.top + (chart.chartArea.bottom - chart.chartArea.top) / 2;
-                        const radius = Math.min(chart.chartArea.right - chart.chartArea.left, chart.chartArea.bottom - chart.chartArea.top) / 2;
-                        
-                        // Draw vertical and horizontal lines
-                        ctx.save();
-                        ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
-                        ctx.lineWidth = 1;
-                        
-                        // Vertical line
-                        ctx.beginPath();
-                        ctx.moveTo(xCenter, yCenter - radius);
-                        ctx.lineTo(xCenter, yCenter + radius);
-                        ctx.stroke();
-                        
-                        // Horizontal line
-                        ctx.beginPath();
-                        ctx.moveTo(xCenter - radius, yCenter);
-                        ctx.lineTo(xCenter + radius, yCenter);
-                        ctx.stroke();
-                        
-                        // Draw 5 concentric circles with labels
-                        const maxValue = 5;
-                        for (let i = 1; i <= maxValue; i++) {
-                            const circleRadius = (i / maxValue) * radius;
-                            
-                            // Add small tick marks at each value point on vertical and horizontal axes
-                            ctx.beginPath();
-                            ctx.moveTo(xCenter - 5, yCenter - circleRadius);
-                            ctx.lineTo(xCenter + 5, yCenter - circleRadius);
-                            ctx.stroke();
-                            
-                            ctx.beginPath();
-                            ctx.moveTo(xCenter - 5, yCenter + circleRadius);
-                            ctx.lineTo(xCenter + 5, yCenter + circleRadius);
-                            ctx.stroke();
-                            
-                            ctx.beginPath();
-                            ctx.moveTo(xCenter - circleRadius, yCenter - 5);
-                            ctx.lineTo(xCenter - circleRadius, yCenter + 5);
-                            ctx.stroke();
-                            
-                            ctx.beginPath();
-                            ctx.moveTo(xCenter + circleRadius, yCenter - 5);
-                            ctx.lineTo(xCenter + circleRadius, yCenter + 5);
-                            ctx.stroke();
-                            
-                            // Add value labels at each tick point
-                            ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-                            ctx.font = '10px Arial';
-                            ctx.textAlign = 'center';
-                            ctx.textBaseline = 'middle';
-                            
-                            // Top axis label
-                            ctx.fillText(i.toString(), xCenter, yCenter - circleRadius - 10);
-                            
-                            // Bottom axis label
-                            ctx.fillText(i.toString(), xCenter, yCenter + circleRadius + 10);
-                            
-                            // Left axis label
-                            ctx.textAlign = 'right';
-                            ctx.fillText(i.toString(), xCenter - circleRadius - 10, yCenter);
-                            
-                            // Right axis label
-                            ctx.textAlign = 'left';
-                            ctx.fillText(i.toString(), xCenter + circleRadius + 10, yCenter);
-                        }
-                        
-                        ctx.restore();
-                    }
-                };
-                
-                radarChart = new Chart(ctx, {
-                    type: 'radar',
-                    data: {
-                        labels: clusterScores.map(c => c.name),
-                        datasets: [{
-                            label: 'Your Competency Profile',
-                            data: clusterScores.map(c => c.score),
-                            backgroundColor: 'rgba(52, 152, 219, 0.2)',
-                            borderColor: 'rgba(52, 152, 219, 1)',
-                            pointBackgroundColor: 'rgba(52, 152, 219, 1)',
-                            pointBorderColor: '#fff',
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: 'rgba(52, 152, 219, 1)'
-                        }]
-                    },
-                    plugins: [gridLines],
-                    options: {
-                        scales: {
-                            r: {
-                                angleLines: {
-                                    display: true
-                                },
-                                grid: {
-                                    color: 'rgba(0, 0, 0, 0.1)',
-                                    circular: true
-                                },
-                                ticks: {
-                                    backdropColor: 'transparent',
-                                    showLabelBackdrop: false
-                                },
-                                pointLabels: {
-                                    font: {
-                                        size: 12,
-                                        weight: 'bold'
-                                    }
-                                },
-                                beginAtZero: true,
-                                suggestedMin: 0,
-                                suggestedMax: 5
-                            }
-                        },
-                        plugins: {
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return `Score: ${context.raw.toFixed(1)} / 5`;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-            
-            // Form submission handler
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const scores = calculateScores();
-                currentScores = scores;
-                const persona = determinePersona(scores.overall);
-                currentPersona = persona;
-                const userRecommendations = getRecommendations(scores.clusters);
-                currentRecommendations = userRecommendations;
-                
-                // Update the results UI
-                overallScoreElement.textContent = scores.overall.toFixed(1);
-                personaTitle.textContent = persona.name;
-                personaDescription.textContent = persona.description;
-                
-                // Create recommendations list
-                recommendationsList.innerHTML = '';
-                userRecommendations.forEach(rec => {
-                    const recItem = document.createElement('div');
-                    recItem.className = 'recommendation-item';
-                    recItem.innerHTML = `<strong>${rec.cluster}:</strong> ${rec.recommendation}`;
-                    recommendationsList.appendChild(recItem);
-                });
-                
-                // Create radar chart
-                createRadarChart(scores.clusters);
-                
-                // Show results
-                results.style.display = 'block';
-                
-                // Scroll to results
-                results.scrollIntoView({ behavior: 'smooth' });
-            });
-            
-            // Export PDF function
-            exportPdfBtn.addEventListener('click', function() {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF('p', 'mm', 'a4');
-                const width = doc.internal.pageSize.getWidth();
-                const margin = 20;
-                let yPos = 20;
-                
-                // Title
-                doc.setFontSize(20);
-                doc.setTextColor(52, 152, 219);
-                doc.text('Educator AI Competency Assessment Report', width/2, yPos, { align: 'center' });
-                yPos += 15;
-                
-                // Persona
-                doc.setFontSize(16);
-                doc.setTextColor(52, 152, 219);
-                doc.text(`AI Educator Persona: ${currentPersona.name}`, width/2, yPos, { align: 'center' });
-                yPos += 10;
-                
-                // Overall Score
-                doc.setFontSize(14);
-                doc.setTextColor(0, 0, 0);
-                doc.text(`Overall Score: ${currentScores.overall.toFixed(1)}`, margin, yPos);
-                yPos += 10;
-                
-                // Persona Description
-                doc.setFontSize(12);
-                const splitDesc = doc.splitTextToSize(currentPersona.description, width - 2*margin);
-                doc.text(splitDesc, margin, yPos);
-                yPos += splitDesc.length * 7;
-                
-                // Capture Chart
-                html2canvas(document.getElementById('radar-chart')).then(canvas => {
-                    const imgData = canvas.toDataURL('image/png');
-                    
-                    // Add some space before chart
-                    yPos += 10;
-                    
-                    // Add chart title
-                    doc.setFontSize(14);
-                    doc.text('Competency Areas Profile', margin, yPos);
-                    yPos += 8;
-                    
-                    // Add chart to PDF
-                    const imgWidth = 170;
-                    const imgHeight = canvas.height * imgWidth / canvas.width;
-                    doc.addImage(imgData, 'PNG', (width - imgWidth)/2, yPos, imgWidth, imgHeight);
-                    yPos += imgHeight + 15;
-                    
-                    // Add recommendations
-                    doc.setFontSize(14);
-                    doc.text('Recommendations for Growth', margin, yPos);
-                    yPos += 8;
-                    
-                    doc.setFontSize(12);
-                    currentRecommendations.forEach(rec => {
-                        const text = `${rec.cluster}: ${rec.recommendation}`;
-                        const splitRec = doc.splitTextToSize(text, width - 2*margin);
-                        
-                        // Check if we need a new page
-                        if (yPos + splitRec.length * 6 > doc.internal.pageSize.getHeight() - margin) {
-                            doc.addPage();
-                            yPos = 20;
-                        }
-                        
-                        doc.text(splitRec, margin, yPos);
-                        yPos += splitRec.length * 6 + 5;
-                    });
-                    
-                    // Add date and time at the bottom
-                    const now = new Date();
-                    doc.setFontSize(10);
-                    doc.setTextColor(100, 100, 100);
-                    doc.text(`Report generated: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`, 
-                             width - margin, doc.internal.pageSize.getHeight() - 10, { align: 'right' });
-                    
-                    // Save the PDF
-                    doc.save('AI_Competency_Assessment_Report.pdf');
-                });
-            });
-        });
-    </script>
-</body>
-</html>
+                        </div
