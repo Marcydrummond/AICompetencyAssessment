@@ -1,30 +1,3 @@
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            
-            .options {
-                padding-left: 10px;
-            }
-            
-            .export-buttons {
-                flex-direction: column;
-            }
-            
-            .chart-container {
-                height: 450px; /* Adjusted for mobile */
-                padding: 10px;
-            }
-            
-            .competency-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .competency-score {
-                margin-top: 5px;
-            }
-        }<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -168,15 +141,15 @@
             color: var(--primary-color);
         }
         
-        .chart-container {
-            width: 100%;
-            max-width: 800px;
-            height: 1200px; /* Further increased height to avoid overlap */
-            margin: 0 auto 100px auto; /* Increased bottom margin for more separation */
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+	.chart-container {
+        	width: 100%;
+        	max-width: 800px;
+       		height: 500px;
+        	margin: 0 auto 100px auto; /* Increased bottom margin from 40px to 60px */
+        	padding: 20px;
+        	background-color: white;
+        	border-radius: 8px;
+        	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .recommendations {
@@ -249,7 +222,7 @@
         
         /* Skill level indicator for each competency area */
         .competency-level {
-            margin-top: 50px;
+            margin-top: 80px;
         }
         
         .competency-level h3 {
@@ -304,9 +277,9 @@
         
         <!-- Add this style for clear separation between sections -->
         .section-divider {
-            height: 2px;
+            height: 3px;
             background-color: #e0e0e0;
-            margin: 50px 0;
+            margin: 80px 0;
             clear: both;
         }
     </style>
