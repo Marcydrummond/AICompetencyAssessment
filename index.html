@@ -1005,116 +1005,119 @@
                 });
             }
             
-            // Function to create horizontal bar chart
-            function createHorizontalBarChart(clusterScores) {
-                const ctx = document.getElementById('competency-chart').getContext('2d');
-                
-                if (window.competencyChart) {
-                    window.competencyChart.destroy();
-                }
-                
-                // Define color scheme based on score
-                function getBarColor(score) {
-                    if (score < 2) return 'rgba(231, 76, 60, 0.7)'; // Red for lower scores
-                    if (score < 3) return 'rgba(243, 156, 18, 0.7)'; // Orange for mid-low scores
-                    if (score < 4) return 'rgba(46, 204, 113, 0.7)'; // Green for mid-high scores
-                    return 'rgba(52, 152, 219, 0.7)'; // Blue for high scores
-                }
-                
-                // Sort data from highest to lowest score for better visualization
-                const sortedData = [...clusterScores].sort((a, b) => b.score - a.score);
-                
-                window.competencyChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: sortedData.map(c => c.name),
-                        datasets: [{
-                            label: 'Competency Score',
-                            data: sortedData.map(c => c.score),
-                            backgroundColor: sortedData.map(c => getBarColor(c.score)),
-                            borderColor: sortedData.map(c => getBarColor(c.score).replace('0.7', '1')),
-                            borderWidth: 1
-                        }]
+// Function to create horizontal bar chart
+function createHorizontalBarChart(clusterScores) {
+    const ctx = document.getElementById('competency-chart').getContext('2d');
+    
+    if (window.competencyChart) {
+        window.competencyChart.destroy();
+    }
+    
+    // Define color scheme based on score
+    function getBarColor(score) {
+        if (score < 2) return 'rgba(231, 76, 60, 0.7)'; // Red for lower scores
+        if (score < 3) return 'rgba(243, 156, 18, 0.7)'; // Orange for mid-low scores
+        if (score < 4) return 'rgba(46, 204, 113, 0.7)'; // Green for mid-high scores
+        return 'rgba(52, 152, 219, 0.7)'; // Blue for high scores
+    }
+    
+    // Sort data from highest to lowest score for better visualization
+    const sortedData = [...clusterScores].sort((a, b) => b.score - a.score);
+    
+    window.competencyChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: sortedData.map(c => c.name),
+            datasets: [{
+                label: 'Competency Score',
+                data: sortedData.map(c => c.score),
+                backgroundColor: sortedData.map(c => getBarColor(c.score)),
+                borderColor: sortedData.map(c => getBarColor(c.score).replace('0.7', '1')),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',  // This makes the bars horizontal
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 5,
+                    ticks: {
+                        stepSize: 1,
+                        callback: function(value) {
+                            return value.toFixed(0);
+                        }
                     },
-                    options: {
-                        indexAxis: 'y',  // This makes the bars horizontal
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            x: {
-                                beginAtZero: true,
-                                max: 5,
-                                ticks: {
-                                    stepSize: 1,
-                                    callback: function(value) {
-                                        return value.toFixed(0);
-                                    }
-                                },
-                                grid: {
-                                    color: 'rgba(0, 0, 0, 0.1)'
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'Score (0-5)',
-                                    font: {
-                                        weight: 'bold'
-                                    }
-                                }
-                            },
-                            y: {
-                                grid: {
-                                    display: false
-                                }
-                            }
-                        },
-                        plugins: {
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return `Score: ${context.raw.toFixed(1)} / 5`;
-                                    },
-                                    afterLabel: function(context) {
-                                        const score = context.raw;
-                                        let level;
-                                        if (score < 1.5) level = "Incidental User";
-                                        else if (score < 2.5) level = "Active Explorer";
-                                        else if (score < 3.5) level = "Informed Integrator";
-                                        else if (score < 4.5) level = "Creative Adapter";
-                                        else level = "Value Creator";
-                                        
-                                        return `Level: ${level}`;
-                                    }
-                                }
-                            },
-                            legend: {
-                                display: false
-                            }
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Score (0-5)',
+                        font: {
+                            weight: 'bold'
                         }
                     }
-                });
-                
-                // Add explanation of color coding inside the chart container (not below)
-                const chartContainer = document.querySelector('.chart-container');
-                const legendElement = document.createElement('div');
-                legendElement.className = 'level-legend';
-                legendElement.style.marginBottom = '20px'; // Add margin to separate from chart
-                legendElement.innerHTML = `
-                    <div class="legend-title">Score Levels:</div>
-                    <div class="legend-item"><span class="color-dot" style="background-color: rgba(231, 76, 60, 0.7)"></span> 1: Incidental User</div>
-                    <div class="legend-item"><span class="color-dot" style="background-color: rgba(243, 156, 18, 0.7)"></span> 2: Active Explorer</div>
-                    <div class="legend-item"><span class="color-dot" style="background-color: rgba(46, 204, 113, 0.7)"></span> 3: Informed Integrator</div>
-                    <div class="legend-item"><span class="color-dot" style="background-color: rgba(52, 152, 219, 0.7)"></span> 4-5: Creative Adapter/Value Creator</div>
-                `;
-                
-                // Remove existing legend if it exists
-                const existingLegend = chartContainer.querySelector('.level-legend');
-                if (existingLegend) {
-                    existingLegend.remove();
+                },
+                y: {
+                    grid: {
+                        display: false
+                    }
                 }
-                
-                // Insert at the beginning of chart container (before the canvas)
-                chartContainer.insertBefore(legendElement, chartContainer.firstChild);
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `Score: ${context.raw.toFixed(1)} / 5`;
+                        },
+                        afterLabel: function(context) {
+                            const score = context.raw;
+                            let level;
+                            if (score < 1.5) level = "Incidental User";
+                            else if (score < 2.5) level = "Active Explorer";
+                            else if (score < 3.5) level = "Informed Integrator";
+                            else if (score < 4.5) level = "Creative Adapter";
+                            else level = "Value Creator";
+                            
+                            return `Level: ${level}`;
+                        }
+                    }
+                },
+                legend: {
+                    display: false
+                }
             }
+        }
+    });
+    
+    // Add this line right here to set chart height
+    document.getElementById('competency-chart').style.height = '350px';
+    
+    // Add explanation of color coding inside the chart container (not below)
+    const chartContainer = document.querySelector('.chart-container');
+    const legendElement = document.createElement('div');
+    legendElement.className = 'level-legend';
+    legendElement.style.marginBottom = '20px'; // Add margin to separate from chart
+    legendElement.innerHTML = `
+        <div class="legend-title">Score Levels:</div>
+        <div class="legend-item"><span class="color-dot" style="background-color: rgba(231, 76, 60, 0.7)"></span> 1: Incidental User</div>
+        <div class="legend-item"><span class="color-dot" style="background-color: rgba(243, 156, 18, 0.7)"></span> 2: Active Explorer</div>
+        <div class="legend-item"><span class="color-dot" style="background-color: rgba(46, 204, 113, 0.7)"></span> 3: Informed Integrator</div>
+        <div class="legend-item"><span class="color-dot" style="background-color: rgba(52, 152, 219, 0.7)"></span> 4-5: Creative Adapter/Value Creator</div>
+    `;
+    
+    // Remove existing legend if it exists
+    const existingLegend = chartContainer.querySelector('.level-legend');
+    if (existingLegend) {
+        existingLegend.remove();
+    }
+    
+    // Insert at the beginning of chart container (before the canvas)
+    chartContainer.insertBefore(legendElement, chartContainer.firstChild);
+}
             
             // Add this new function to create a detailed breakdown of each competency area
             function createCompetencyBreakdown(clusterScores) {
