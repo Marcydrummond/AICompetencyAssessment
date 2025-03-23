@@ -142,15 +142,15 @@
         }
         
 	.chart-container {
-        	width: 100%;
-        	max-width: 800px;
-       		height: 400px;
-        	margin: 0 auto 120px auto; /* Increased bottom margin from 40px to 60px */
-        	padding: 20px;
-		background-color: white;
-        	border-radius: 8px;
-        	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+		width: 100%;
+    		max-width: 800px;
+    		height: 400px; /* Reduced fixed height */
+    		margin: 0 auto; /* Remove bottom margin from here */
+   		padding: 20px;
+   		background-color: white;
+  		border-radius: 8px;
+  		box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+	}
         
         .recommendations {
             border-left: 4px solid var(--accent-color);
@@ -221,11 +221,11 @@
         }
         
         /* Skill level indicator for each competency area */
-        .competency-level {
-            padding-top: 30px
-	    margin-top: 150px;
-        }
-        
+	.competency-level {
+	    margin-top: 200px; /* Add significant top margin */
+	    clear: both; /* Ensure it starts below any floating elements */
+	}
+	   
         .competency-level h3 {
             border-bottom: 2px solid var(--primary-color);
             padding-bottom: 8px;
@@ -277,12 +277,12 @@
         }
         
         <!-- Add this style for clear separation between sections -->
-        .section-divider {
-            height: 3px;
-            background-color: #e0e0e0;
-            margin: 120px 0;
-            clear: both;
-        }
+	.section-divider {
+	    height: 3px;
+	    background-color: #e0e0e0;
+	    margin: 150px 0; /* Increase margin significantly */
+	    clear: both; /* Ensure it clears any floating elements */
+	}
     </style>
 </head>
 <body>
